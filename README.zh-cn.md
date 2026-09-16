@@ -20,6 +20,18 @@ dist/npm-stat-modern-ui.user.js
 
 `dist/` 在本地生成，不提交到仓库。
 
+## 🚀 公开安装
+
+先安装 Tampermonkey 或兼容的用户脚本管理器，再从下列入口安装或下载。推荐使用 GitHub Pages 链接，它是持续安装与自动更新来源。
+
+| 渠道 | 安装或下载 |
+| --- | --- |
+| GitHub Pages | [安装最新用户脚本](https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js) |
+| GitHub Release | [浏览带版本的下载](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases) |
+| Gitee Release | [浏览中国镜像](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui/releases) |
+
+脚本管理器打开安装确认页后，选择“安装”并刷新 npm-stat.com。用户脚本会检查 Pages 地址更新；请保持管理器的自动更新设置启用。
+
 ## 📥 本地安装
 
 1. 如果之前安装过 `npm-stat Modern UI (Development Loader)`，请在 Tampermonkey 中禁用或删除它。

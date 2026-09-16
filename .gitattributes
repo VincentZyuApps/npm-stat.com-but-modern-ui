@@ -1,2 +1,5 @@
 # Include Markdown documentation in GitHub language statistics.
 *.md linguist-detectable=true linguist-documentation=false
+
+# GitHub Actions runs release synchronization with Bash on Linux.
+*.sh text eol=lf

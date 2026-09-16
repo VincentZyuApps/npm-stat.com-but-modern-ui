@@ -20,6 +20,18 @@ dist/npm-stat-modern-ui.user.js
 
 `dist/` is generated locally and is not committed.
 
+## 🚀 Public installation
+
+Install Tampermonkey or a compatible userscript manager, then use one of these links. The GitHub Pages link is the recommended persistent installation and update source.
+
+| Channel | Install or download |
+| --- | --- |
+| GitHub Pages | [Install the latest userscript](https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js) |
+| GitHub Release | [Browse versioned downloads](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases) |
+| Gitee Release | [Browse the China mirror](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui/releases) |
+
+After the manager opens its installation page, select **Install** and refresh npm-stat.com. The userscript checks the Pages URL for updates; leave the manager's automatic-update setting enabled.
+
 ## 📥 Local Installation
 
 1. In Tampermonkey, disable or delete `npm-stat Modern UI (Development Loader)` if it was installed previously.

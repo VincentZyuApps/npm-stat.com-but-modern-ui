@@ -8,10 +8,14 @@ export default defineConfig({
       entry: 'src/main.ts',
       userscript: {
         name: 'npm-stat Modern UI',
-        namespace: 'https://github.com/pvorb/npm-stat.com',
+        namespace: 'https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui',
         version: packageJson.version,
         description: 'A modern interface for npm-stat.com',
         license: 'MIT',
+        homepageURL: 'https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui#readme',
+        supportURL: 'https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/issues',
+        downloadURL: 'https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js',
+        updateURL: 'https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js',
         match: ['https://npm-stat.com/*', 'http://npm-stat.com/*'],
         'run-at': 'document-start',
         grant: 'none'

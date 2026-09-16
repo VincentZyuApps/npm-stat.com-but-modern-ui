@@ -1,0 +1,236 @@
+name: Build Release Publish
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'action: build only; release: GitHub and Gitee Release; publish: Release plus GitHub Pages.'
+        required: false
+        default: action
+        type: choice
+        options:
+          - action
+          - release
+          - publish
+      tag:
+        description: 'Release tag, for example v0.2.0-beta.6. Empty means v + package.json version.'
+        required: false
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: npm-stat-modern-ui-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  select-mode:
+    runs-on: ubuntu-latest
+    outputs:
+      should_run: ${{ steps.mode.outputs.should_run }}
+      mode: ${{ steps.mode.outputs.mode }}
+      trigger: ${{ steps.mode.outputs.trigger }}
+      version: ${{ steps.version.outputs.version }}
+      tag: ${{ steps.version.outputs.tag }}
+      commits: ${{ steps.commits.outputs.log }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Select workflow mode
+        id: mode
+        env:
+          DISPATCH_MODE: ${{ inputs.mode }}
+        run: |
+          set -euo pipefail
+          if [ "${GITHUB_EVENT_NAME}" = 'workflow_dispatch' ]; then
+            echo 'should_run=true' >> "${GITHUB_OUTPUT}"
+            echo "mode=${DISPATCH_MODE:-action}" >> "${GITHUB_OUTPUT}"
+            echo "trigger=workflow_dispatch:${DISPATCH_MODE:-action}" >> "${GITHUB_OUTPUT}"
+          else
+            message="$(git log -1 --pretty=%B)"
+            case "${message,,}" in
+              *'build publish'*) mode=publish ;;
+              *'build release'*) mode=release ;;
+              *'build action'*) mode=action ;;
+              *) mode=none ;;
+            esac
+            if [ "${mode}" = none ]; then
+              echo 'should_run=false' >> "${GITHUB_OUTPUT}"
+              echo 'trigger=none' >> "${GITHUB_OUTPUT}"
+            else
+              echo 'should_run=true' >> "${GITHUB_OUTPUT}"
+              echo "trigger=commit:${mode}" >> "${GITHUB_OUTPUT}"
+            fi
+            echo "mode=${mode}" >> "${GITHUB_OUTPUT}"
+          fi
+
+      - name: Read version and release tag
+        id: version
+        if: steps.mode.outputs.should_run == 'true'
+        env:
+          MANUAL_TAG: ${{ inputs.tag }}
+        run: |
+          version="$(node -p "require('./package.json').version")"
+          echo "version=${version}" >> "${GITHUB_OUTPUT}"
+          echo "tag=${MANUAL_TAG:-v${version}}" >> "${GITHUB_OUTPUT}"
+
+      - name: Collect commits
+        id: commits
+        if: steps.mode.outputs.should_run == 'true'
+        run: |
+          log="$(git log -1 --pretty=format:'- %s (%h) by @%an')"
+          { echo 'log<<EOF'; echo "${log}"; echo EOF; } >> "${GITHUB_OUTPUT}"
+
+  build:
+    needs: select-mode
+    if: needs.select-mode.outputs.should_run == 'true'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - run: npm run check
+      - name: Prepare release and Pages assets
+        run: |
+          set -euo pipefail
+          mkdir -p release pages
+          cp dist/npm-stat-modern-ui.user.js release/
+          tar -czf release/npm-stat-modern-ui-dist.tar.gz -C dist .
+          (
+            cd release
+            sha256sum npm-stat-modern-ui.user.js > SHA256SUMS.txt
+            sha256sum npm-stat-modern-ui-dist.tar.gz >> SHA256SUMS.txt
+          )
+          cp release/npm-stat-modern-ui.user.js release/SHA256SUMS.txt pages/
+          touch pages/.nojekyll
+          cat > pages/index.html <<'HTML'
+          <!doctype html>
+          <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>npm-stat Modern UI</title><body><main><h1>npm-stat Modern UI</h1><p><a href="./npm-stat-modern-ui.user.js">Install userscript</a></p><p><a href="./SHA256SUMS.txt">SHA256 checksums</a></p></main></body>
+          HTML
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-assets
+          path: release/
+          retention-days: 7
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pages-site
+          path: pages/
+          retention-days: 7
+
+  publish-release:
+    needs: [select-mode, build]
+    if: needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-assets
+          path: release/
+      - name: Render release notes
+        env:
+          REPO: ${{ github.repository }}
+          VERSION: ${{ needs.select-mode.outputs.version }}
+          RELEASE_TAG: ${{ needs.select-mode.outputs.tag }}
+          TRIGGER: ${{ needs.select-mode.outputs.trigger }}
+          COMMITS: ${{ needs.select-mode.outputs.commits }}
+        run: |
+          cat > build-info.md <<EOF
+          - Repository: \`${REPO}\`
+          - Version: \`${VERSION}\`
+          - Release tag: \`${RELEASE_TAG}\`
+          - Commit: \`${GITHUB_SHA}\`
+          - Trigger: \`${TRIGGER}\`
+          - Workflow: https://github.com/${REPO}/actions/runs/${GITHUB_RUN_ID}
+          EOF
+          node --input-type=module <<'NODE'
+          import { readFile, writeFile } from 'node:fs/promises';
+          const template = await readFile('.github/release_template.md', 'utf8');
+          const environment = process.env;
+          const result = template
+            .replaceAll('__REPO__', environment.REPO)
+            .replaceAll('__VERSION__', environment.VERSION)
+            .replaceAll('__TAG__', environment.RELEASE_TAG)
+            .replaceAll('__BASE_URL__', `https://github.com/${environment.REPO}/releases/download/${environment.RELEASE_TAG}`)
+            .replaceAll('__BUILD_INFO__', await readFile('build-info.md', 'utf8'))
+            .replaceAll('__COMMIT_LOG__', environment.COMMITS);
+          await writeFile('release-notes.md', result);
+          NODE
+      - name: Create or update GitHub Release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ needs.select-mode.outputs.tag }}
+          VERSION: ${{ needs.select-mode.outputs.version }}
+        run: |
+          set -euo pipefail
+          release_kind=(--latest)
+          if [[ "${VERSION}" == *-* ]]; then
+            release_kind=(--prerelease)
+          fi
+          if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
+            gh release upload "${RELEASE_TAG}" release/* --clobber
+            gh release edit "${RELEASE_TAG}" --title "${RELEASE_TAG}" --notes-file release-notes.md "${release_kind[@]}"
+          else
+            gh release create "${RELEASE_TAG}" release/* --target "${GITHUB_SHA}" --title "${RELEASE_TAG}" --notes-file release-notes.md "${release_kind[@]}"
+          fi
+
+  sync-gitee-code:
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: Yikun/hub-mirror-action@v1.5
+        with:
+          src: github/VincentZyuApps
+          dst: gitee/vincent-zyu
+          dst_key: ${{ secrets.GITEE_PRIVATE_KEY }}
+          dst_token: ${{ secrets.GITEE_TOKEN }}
+          static_list: npm-stat.com-but-modern-ui
+          force_update: true
+
+  sync-gitee-release:
+    needs: [select-mode, publish-release, sync-gitee-code]
+    if: always() && (needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish') && needs.publish-release.result == 'success' && needs.sync-gitee-code.result == 'success'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Mirror the GitHub Release to Gitee
+        env:
+          GH_REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ github.token }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          GITEE_OWNER: vincent-zyu
+          GITEE_REPO: npm-stat.com-but-modern-ui
+          RELEASE_TAG: ${{ needs.select-mode.outputs.tag }}
+        run: bash .github/scripts/sync-gitee-release.sh
+
+  publish-pages:
+    needs: [select-mode, build]
+    if: needs.select-mode.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: pages-site
+          path: pages/
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: pages/
+      - id: deployment
+        uses: actions/deploy-pages@v4
