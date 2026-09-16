@@ -1,2 +1,2 @@
 # Include Markdown documentation in GitHub language statistics.
-*.md linguist-detectable=true
+*.md linguist-detectable=true linguist-documentation=false
