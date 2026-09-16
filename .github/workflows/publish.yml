@@ -40,7 +40,7 @@ jobs:
       tag: ${{ steps.version.outputs.tag }}
       commits: ${{ steps.commits.outputs.log }}
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
         with:
           fetch-depth: 0
 
@@ -94,8 +94,8 @@ jobs:
     if: needs.select-mode.outputs.should_run == 'true'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 24
           cache: npm
@@ -134,7 +134,7 @@ jobs:
     if: needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - uses: actions/download-artifact@v4
         with:
           name: release-assets
@@ -205,7 +205,7 @@ jobs:
     if: always() && (needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish') && needs.publish-release.result == 'success' && needs.sync-gitee-code.result == 'success'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Mirror the GitHub Release to Gitee
         env:
           GH_REPO: ${{ github.repository }}
