@@ -184,7 +184,8 @@ function buildOption(
       data: series.map((item) => item.name || 'package')
     },
     grid: {
-      top: hasLegend ? 70 : 54,
+      // Separate rows for the title, legend and y-axis name, including narrow charts.
+      top: hasLegend ? 96 : 64,
       right: 24,
       bottom: hasZoomControl ? 64 : 34,
       left: 68,
@@ -223,8 +224,10 @@ function buildOption(
       type: scale === 'log' ? 'log' : 'value',
       min: scale === 'log' ? undefined : 0,
       logBase: scale === 'log' ? 10 : undefined,
-      name: aggregation ? mode === 'mean' ? `Downloads / ${unit}` : 'Downloads / group' : legacy.yAxis?.title?.text || 'Downloads',
-      nameTextStyle: { color: tokens.muted, fontSize: 11, fontWeight: 600 },
+      name: aggregation ? mode === 'mean' ? `Downloads / ${unit}` : 'Downloads / group'
+        : id === 'months' ? 'Downloads / month' : id === 'years' ? 'Downloads / year' : legacy.yAxis?.title?.text || 'Downloads',
+      nameGap: 18,
+      nameTextStyle: { color: tokens.muted, fontSize: 11, fontWeight: 600, align: 'left', padding: [0, 0, 0, -64] },
       axisLabel: {
         color: tokens.muted,
         fontSize: 10,

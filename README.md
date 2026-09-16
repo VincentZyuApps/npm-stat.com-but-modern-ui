@@ -4,6 +4,22 @@
 
 [![npm-stat.com](https://img.shields.io/badge/npm--stat.com-CB3837?logo=npm&logoColor=white)](https://npm-stat.com/) A Tampermonkey userscript that modernizes the npm-stat.com query and chart pages.
 
+## 📷 Appearance screenshots
+
+Real-page screenshots of all seven styles, with light and dark side by side. Click an image to view the full size.
+
+| Style | Light | Dark |
+| --- | --- | --- |
+| Original npm-stat | [![Original npm-stat light](docs/images/preview/light-original.png)](docs/images/preview/light-original.png) | [![Original npm-stat dark](docs/images/preview/dark-original.png)](docs/images/preview/dark-original.png) |
+| npm | [![npm light](docs/images/preview/light-npm.png)](docs/images/preview/light-npm.png) | [![npm dark](docs/images/preview/dark-npm.png)](docs/images/preview/dark-npm.png) |
+| Vercel | [![Vercel light](docs/images/preview/light-vercel.png)](docs/images/preview/light-vercel.png) | [![Vercel dark](docs/images/preview/dark-vercel.png)](docs/images/preview/dark-vercel.png) |
+| Windows Fluent | [![Windows Fluent light](docs/images/preview/light-fluent.png)](docs/images/preview/light-fluent.png) | [![Windows Fluent dark](docs/images/preview/dark-fluent.png)](docs/images/preview/dark-fluent.png) |
+| Google Material 3 | [![Google Material 3 light](docs/images/preview/light-material.png)](docs/images/preview/light-material.png) | [![Google Material 3 dark](docs/images/preview/dark-material.png)](docs/images/preview/dark-material.png) |
+| Apple iOS/macOS | [![Apple iOS/macOS light](docs/images/preview/light-apple.png)](docs/images/preview/light-apple.png) | [![Apple iOS/macOS dark](docs/images/preview/dark-apple.png)](docs/images/preview/dark-apple.png) |
+| GitHub | [![GitHub light](docs/images/preview/light-github.png)](docs/images/preview/light-github.png) | [![GitHub dark](docs/images/preview/dark-github.png)](docs/images/preview/dark-github.png) |
+
+Run `npm run docs:screenshots` to build and recapture automatically without Tampermonkey. Real extension mode first requires you to install Tampermonkey, allow userscripts, paste the built JS, and refresh to confirm. See the [screenshot tooling guide](scripts/docs/readme.md) for both entry points, all options, and step-by-step instructions.
+
 ## 🔨 Build
 
 ```powershell

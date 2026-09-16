@@ -34,4 +34,4 @@
 :root[data-npm-stat-style='material'] .ns-query-table input[type='submit'] { min-height: 44px; border-radius: 100px; }
 :root[data-npm-stat-style='material'] .ns-main h2 { font-weight: 500; }
 :root[data-npm-stat-style='material'] .ns-metric, :root[data-npm-stat-style='material'] .ns-chart { border-color: transparent; }
-:root[data-npm-stat-style='material'] .ns-date-shortcuts button { padding: 8px 12px; }
+:root[data-npm-stat-style='material'] .ns-date-shortcuts button { padding: 8px 6px; }

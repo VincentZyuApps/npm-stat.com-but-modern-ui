@@ -1,0 +1,29 @@
+{
+  "version": "0.2.0-beta.5+20260916",
+  "mode": "inject",
+  "browser": "152.0.7977.83",
+  "url": "https://npm-stat.com/charts.html?package=react&package=vue&package=svelte&package=preact&package=%40angular%2Fcore&from=2015-01-01&to=2026-09-15&ui_style=original&ui_theme=light&ui_day_size=1&ui_week_size=1&ui_day_mode=mean&ui_week_mode=mean",
+  "viewport": {
+    "width": 1440,
+    "height": 1000
+  },
+  "deviceScaleFactor": 1,
+  "fullPage": true,
+  "capturedAt": "2026-09-16T09:01:10.511Z",
+  "files": [
+    "light-original.png",
+    "dark-original.png",
+    "light-npm.png",
+    "dark-npm.png",
+    "light-vercel.png",
+    "dark-vercel.png",
+    "light-fluent.png",
+    "dark-fluent.png",
+    "light-material.png",
+    "dark-material.png",
+    "light-apple.png",
+    "dark-apple.png",
+    "light-github.png",
+    "dark-github.png"
+  ]
+}

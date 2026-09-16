@@ -7,11 +7,16 @@
   "scripts": {
     "build": "vite build",
     "typecheck": "tsc --noEmit",
-    "test": "node --experimental-strip-types --test test/*.test.ts",
-    "check": "npm run typecheck && npm run test && npm run build && node scripts/verify-build.mjs && node --check dist/npm-stat-modern-ui.user.js"
+    "test": "node --experimental-strip-types --test test/*.test.ts test/*.test.mjs",
+    "verify:build": "node scripts/verify/build.mjs",
+    "verify:loading": "node scripts/verify/loading.mjs",
+    "docs:screenshots": "node scripts/docs/screenshots.mjs",
+    "docs:setup": "node scripts/docs/setup.mjs",
+    "check": "npm run typecheck && npm run test && npm run build && npm run verify:build && node --check dist/npm-stat-modern-ui.user.js"
   },
   "devDependencies": {
     "@types/node": "^24.10.1",
+    "playwright-core": "^1.63.0",
     "typescript": "^5.9.3",
     "vite": "^7.3.6",
     "vite-plugin-monkey": "^6.0.1"

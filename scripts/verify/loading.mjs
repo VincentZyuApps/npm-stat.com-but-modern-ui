@@ -1,49 +1,25 @@
-// Run after building: node scripts/verify-loading.mjs <chromium.exe> <temporary-project-directory>
+// Run after building: npm run verify:loading -- --browser-path <chromium.exe>
 import assert from 'node:assert/strict';
-import { spawn } from 'node:child_process';
-import { readFile, mkdir, mkdtemp, rm } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { readFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
+import { argumentsFor, artifact, openBrowser } from '../lib/browser.mjs';
 
-const [browserPath, temporaryDirectory] = process.argv.slice(2);
-if (!browserPath || !temporaryDirectory) throw new Error('Provide Chromium executable and temporary project directory.');
-await mkdir(temporaryDirectory, { recursive: true });
-const profile = await mkdtemp(join(resolve(temporaryDirectory), 'loading-check-'));
-const browser = spawn(browserPath, ['--headless=new', '--no-first-run', '--no-default-browser-check', '--remote-debugging-port=0', `--user-data-dir=${profile}`, 'about:blank'], { windowsHide: true, stdio: 'ignore' });
-const exited = new Promise(resolve => browser.once('exit', resolve));
-let socket;
-let call;
+const options = argumentsFor();
+if (options.help) {
+  console.log('npm run verify:loading -- [--browser-path <executable>] [--headed]');
+  process.exit(0);
+}
+if (options['user-data-dir'] || options['cdp-url']) throw new Error('Loading verification uses an isolated temporary profile.');
+const environment = await openBrowser(options);
 try {
-  let port;
-  for (let attempt = 0; attempt < 100; attempt++) {
-    try { port = (await readFile(join(profile, 'DevToolsActivePort'), 'utf8')).split('\n')[0]; break; } catch { await delay(100); }
-  }
-  if (!port) throw new Error('Chromium debugging endpoint did not start.');
-  const tabs = await (await fetch(`http://127.0.0.1:${port}/json/list`)).json();
-  socket = new WebSocket(tabs.find(tab => tab.type === 'page' && tab.url === 'about:blank').webSocketDebuggerUrl);
-  await new Promise((resolve, reject) => { socket.onopen = resolve; socket.onerror = reject; });
-  let sequence = 0;
-  const pending = new Map();
-  socket.onmessage = ({ data }) => {
-    const response = JSON.parse(data);
-    const task = pending.get(response.id);
-    if (!task) return;
-    pending.delete(response.id);
-    clearTimeout(task.timer);
-    response.error ? task.reject(new Error(JSON.stringify(response.error))) : task.resolve(response.result);
-  };
-  call = (method, params = {}) => new Promise((resolve, reject) => {
-    const id = ++sequence;
-    const timer = setTimeout(() => { pending.delete(id); reject(new Error(`CDP timeout: ${method}`)); }, 15000);
-    pending.set(id, { resolve, reject, timer });
-    socket.send(JSON.stringify({ id, method, params }));
-  });
+  const session = await environment.context.newCDPSession(environment.page);
+  const call = (method, params = {}) => session.send(method, params);
   const evaluate = async expression => {
     const result = await call('Runtime.evaluate', { expression, returnByValue: true, awaitPromise: true });
     if (result.exceptionDetails) throw new Error(JSON.stringify(result.exceptionDetails));
     return result.result.value;
   };
-  const bundle = await readFile(new URL('../dist/npm-stat-modern-ui.user.js', import.meta.url), 'utf8');
+  const bundle = await readFile(artifact, 'utf8');
   const fixture = async loading => {
     await call('Page.navigate', { url: 'about:blank' });
     await delay(100);
@@ -94,9 +70,5 @@ try {
   assert.deepEqual(await evaluate('testErrors'), []);
   console.log('Loading checks passed: 28 appearance/theme/viewport combinations, reduced motion, slow/idle/success/zero/empty/error/missing-renderer states.');
 } finally {
-  if (call && socket?.readyState === WebSocket.OPEN) await call('Browser.close').catch(() => {});
-  socket?.close();
-  await Promise.race([exited, delay(3000)]);
-  if (browser.exitCode === null) browser.kill();
-  await rm(profile, { recursive: true, force: true, maxRetries: 10, retryDelay: 200 });
+  await environment.close();
 }

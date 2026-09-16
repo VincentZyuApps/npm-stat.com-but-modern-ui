@@ -8,7 +8,10 @@ This repository builds a Tampermonkey UI enhancement for `https://npm-stat.com/*
 - `npm run typecheck`: run TypeScript validation without emitting files.
 - `npm run test`: run chart data and metric aggregation unit tests.
 - `npm run check`: type-check, test, build, validate the userscript header, and syntax-check the output.
-- After building, `node scripts/verify-loading.mjs <chromium.exe> <temporary-project-directory>` verifies loading states and all seven appearances in a disposable headless profile. Use the project's directory under `E:\tmp\codex`; the script removes only its own profile.
+- `npm run verify:build` validates the existing userscript in `dist/`; `npm run verify:loading -- --browser-path <executable>` verifies loading states and all seven appearances after a build.
+- `npm run docs:screenshots` builds and captures 14 real-page screenshots using an isolated browser and injection. `npm run docs:setup -- --user-data-dir <dedicated-profile>` opens a persistent browser for manual Tampermonkey installation. See `scripts/docs/readme.md` for both modes, parameters and the user's required installation steps.
+- Automation uses `scripts/lib/browser.mjs` and `playwright-core` with the user's installed browser. Never copy or automate the default personal profile. Connected browsers keep their existing tabs and stay open; only owned temporary profiles are removed. Persistent extension profiles are retained.
+- Keep the English and Chinese root READMEs structurally aligned with equal line counts. Both reference the same `docs/images/preview/` PNGs. Publish screenshots only after all 14 captures succeed; do not substitute fake data for failed real queries.
 
 ## Appearance implementation
 
@@ -29,4 +32,4 @@ This repository builds a Tampermonkey UI enhancement for `https://npm-stat.com/*
 3. Open a new Tampermonkey script, replace its contents with `dist/npm-stat-modern-ui.user.js`, and save.
 4. Refresh `https://npm-stat.com/charts.html?package=koishi-plugin-cs-lookup-vincentzyu-fork`.
 
-There is intentionally no development server, browser profile configuration, or hot reload path. `dist/` is generated and ignored by Git.
+There is intentionally no development server or hot reload path. `dist/` is generated and ignored by Git. Browser paths and persistent profiles are supplied through CLI arguments; temporary automation artifacts use `E:\tmp\codex\npm-stat.com-but-modern-ui` on Windows or a project subdirectory of the system temporary directory on Linux.

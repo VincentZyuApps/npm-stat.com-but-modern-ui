@@ -135,9 +135,12 @@ body.ns-modern #access { display: none; }
 .ns-query-table input[type='submit'] { width: auto; min-width: 126px; border-color: var(--ns-accent); background: var(--ns-accent); color: #fff; cursor: pointer; font-weight: 700; }
 .ns-query-table input[type='submit']:hover { border-color: var(--ns-accent-strong); background: var(--ns-accent-strong); }
 
-.ns-date-shortcuts { display: inline-flex; flex-wrap: wrap; gap: 6px; margin-left: 10px; vertical-align: middle; }
+.ns-query-table td.ns-query-actions-cell:first-child { width: auto !important; }
+.ns-query-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.ns-query-actions > input[type='submit'] { flex: 0 0 auto; }
+.ns-date-shortcuts { display: flex; flex-wrap: wrap; gap: 4px; max-width: 100%; margin: 0; }
 .ns-date-shortcuts button {
-  min-width: 46px; padding: 5px 8px; border: 1px solid var(--ns-line); border-radius: 5px;
+  width: 38px; min-width: 38px; min-height: 38px; padding: 8px 6px; border: 1px solid var(--ns-line); border-radius: 5px;
   background: var(--ns-surface-subtle); color: var(--ns-muted); cursor: pointer; font: 700 12px/1.2 ui-monospace, SFMono-Regular, Consolas, monospace;
 }
 .ns-date-shortcuts button:hover,
@@ -256,7 +259,6 @@ body.ns-modern #access { display: none; }
 .ns-query-form, .ns-chart, .ns-metric, .ns-results-table, .ns-loading { border-radius: var(--ns-radius); }
 .ns-query-table input, .ns-query-table select, .ns-date-shortcuts button, #ns-theme-toggle { border-radius: var(--ns-control-radius); }
 .ns-query-table input[type='submit'], .ns-chart-toolbar button.is-active { color: var(--ns-on-accent); }
-.ns-date-shortcuts { max-width: 100%; margin: 8px 0 0; }
 .ns-results-table { table-layout: fixed; }
 .ns-results-table td { overflow-wrap: anywhere; }
 body.ns-modern button:focus-visible, #ns-style-select:focus-visible { outline: 2px solid var(--ns-accent); outline-offset: 3px; }
@@ -285,7 +287,6 @@ body.ns-modern .ns-main > p { max-width: 700px; }
   .ns-query-table td:last-child { display: block; }
   .ns-query-table tr { display: block; margin-bottom: 12px; }
   .ns-query-table input[type='date'] { max-width: none; }
-  .ns-date-shortcuts { display: flex; margin: 8px 0 0; }
   .ns-chart { height: 278px; padding: 8px; }
   .ns-chart#days,
   .ns-chart#weeks { height: 330px; }

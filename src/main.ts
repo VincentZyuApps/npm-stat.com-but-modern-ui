@@ -1,4 +1,5 @@
 import styles from './styles.css?raw';
+import { version } from '../package.json';
 import { syncChartLoading } from './loading';
 import { installChartRenderer, refreshRenderedCharts, type ResolvedTheme } from './renderer';
 import original from './styles/original.css?raw';
@@ -95,6 +96,8 @@ function addDateShortcuts(form: HTMLFormElement): void {
 
   const container = document.createElement('div');
   container.className = 'ns-date-shortcuts';
+  container.setAttribute('role', 'group');
+  container.setAttribute('aria-label', 'Date range shortcuts');
   const shortcuts: Array<[string, number]> = [
     ['7D', 7],
     ['30D', 30],
@@ -122,10 +125,17 @@ function addDateShortcuts(form: HTMLFormElement): void {
     container.append(button);
   });
 
-  const toField = form.querySelector<HTMLInputElement>('#to');
-  const toCell = toField?.closest('td');
-  if (toCell) {
-    toCell.append(container);
+  const submit = form.querySelector<HTMLInputElement>('input[type="submit"]');
+  if (submit) {
+    const cell = submit.closest('td');
+    if (cell) {
+      cell.colSpan = 2;
+      cell.classList.add('ns-query-actions-cell');
+    }
+    const actions = document.createElement('div');
+    actions.className = 'ns-query-actions';
+    submit.before(actions);
+    actions.append(submit, container);
   } else {
     form.append(container);
   }
@@ -204,6 +214,7 @@ function boot(): void {
   const initializePage = () => {
     applyTheme();
     decoratePage();
+    document.documentElement.dataset.npmStatVersion = version;
   };
 
   // Tampermonkey can execute a userscript after the initial document event.
