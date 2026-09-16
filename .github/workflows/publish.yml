@@ -142,6 +142,17 @@ jobs:
           set -euo pipefail
           test -n "${GITEE_PRIVATE_KEY}" || { echo '::error::GITEE_PRIVATE_KEY is not configured.'; exit 1; }
           test -n "${GITEE_TOKEN}" || { echo '::error::GITEE_TOKEN is not configured.'; exit 1; }
+          key_file="$(mktemp)"
+          trap 'rm -f "${key_file}"' EXIT
+          printf '%s\n' "${GITEE_PRIVATE_KEY}" > "${key_file}"
+          chmod 600 "${key_file}"
+          ssh-keygen -lf "${key_file}" >/dev/null
+          GIT_SSH_COMMAND="ssh -i ${key_file} -o StrictHostKeyChecking=accept-new" \
+            git ls-remote git@gitee.com:vincent-zyu/npm-stat.com-but-modern-ui.git refs/heads/main >/dev/null
+          curl --fail-with-body --silent --show-error --get \
+            --data-urlencode "access_token=${GITEE_TOKEN}" \
+            https://gitee.com/api/v5/repos/vincent-zyu/npm-stat.com-but-modern-ui \
+            | jq -e '.permission.push == true' >/dev/null
 
   publish-release:
     needs: [select-mode, build, validate-gitee-secrets]
