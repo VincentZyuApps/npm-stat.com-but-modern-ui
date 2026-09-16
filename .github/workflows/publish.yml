@@ -118,12 +118,12 @@ jobs:
           <!doctype html>
           <html lang="en"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>npm-stat Modern UI</title><body><main><h1>npm-stat Modern UI</h1><p><a href="./npm-stat-modern-ui.user.js">Install userscript</a></p><p><a href="./SHA256SUMS.txt">SHA256 checksums</a></p></main></body>
           HTML
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: release-assets
           path: release/
           retention-days: 7
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@v5
         with:
           name: pages-site
           path: pages/
@@ -160,7 +160,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: release-assets
           path: release/
@@ -242,14 +242,14 @@ jobs:
         run: bash .github/scripts/sync-gitee-release.sh
 
   publish-pages:
-    needs: [select-mode, build]
+    needs: [select-mode, build, validate-gitee-secrets]
     if: needs.select-mode.outputs.mode == 'publish'
     runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@v5
         with:
           name: pages-site
           path: pages/
