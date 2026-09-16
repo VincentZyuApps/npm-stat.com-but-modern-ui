@@ -1,4 +1,5 @@
 :root {
+  --ns-content-width: 2500px;
   --ns-font: system-ui, sans-serif;
   --ns-radius: 8px;
   --ns-control-radius: 5px;
@@ -69,7 +70,7 @@ body.ns-modern #access { display: none; }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  width: min(1120px, 100%);
+  width: min(var(--ns-content-width), 100%);
   min-height: 72px;
   margin: 0 auto;
   border-bottom: 1px solid var(--ns-line);
@@ -98,7 +99,7 @@ body.ns-modern #access { display: none; }
 #ns-theme-toggle:focus-visible { border-color: var(--ns-accent); color: var(--ns-accent); outline: 2px solid transparent; }
 
 .ns-shell {
-  width: min(1120px, 100%);
+  width: min(var(--ns-content-width), 100%);
   margin: 0 auto;
 }
 
@@ -146,7 +147,7 @@ body.ns-modern #access { display: none; }
   position: relative !important;
   left: auto !important;
   width: 100% !important;
-  max-width: 1120px;
+  max-width: var(--ns-content-width);
   height: 320px;
   min-height: 0;
   margin: 0 0 18px !important;
@@ -160,6 +161,25 @@ body.ns-modern #access { display: none; }
 .ns-chart#days,
 .ns-chart#weeks { height: 368px; }
 .ns-echart { width: 100%; height: 100%; }
+.ns-sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.ns-chart-placeholder { position: absolute; inset: 0; z-index: 2; padding: 16px; background: var(--ns-surface); color: var(--ns-text); }
+.ns-placeholder-title { display: block; font: 700 16px/1.4 var(--ns-font); }
+.ns-placeholder-center { position: absolute; inset: 52px 16px 16px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; }
+.ns-placeholder-message { max-width: 42ch; color: var(--ns-muted); font-size: 13px; line-height: 1.6; text-align: center; overflow-wrap: anywhere; }
+.ns-chart-indicator { display: block; position: relative; width: 32px; height: 32px; flex: 0 0 auto; color: var(--ns-accent); }
+.ns-chart-indicator svg { display: block; width: 100%; height: 100%; animation: var(--ns-loader-rotation, ns-loading-spin 900ms linear infinite); }
+.ns-chart-indicator circle { fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-dasharray: 56 76; transform-origin: center; animation: var(--ns-loader-arc, none); }
+.ns-chart-indicator i { display: none; }
+@keyframes ns-loader-stretch { 0%, 100% { stroke-dasharray: 5 76; stroke-dashoffset: 0; } 50% { stroke-dasharray: 56 76; stroke-dashoffset: -18; } 100% { stroke-dashoffset: -76; } }
+@keyframes ns-loader-travel { 0%, 100% { transform: translateX(-12px); } 50% { transform: translateX(12px); } }
+@keyframes ns-loader-pulse { 0%, 100% { opacity: .25; } 50% { opacity: 1; } }
+@keyframes ns-loader-fade { 0% { opacity: 1; } 100% { opacity: .15; } }
+@keyframes ns-loader-orbit { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) {
+  :root[data-npm-stat-style] .ns-chart-indicator,
+  :root[data-npm-stat-style] .ns-chart-indicator *,
+  :root[data-npm-stat-style] .ns-chart-indicator::before { animation: none !important; }
+}
 
 .ns-chart-toolbar {
   display: flex;
@@ -191,7 +211,7 @@ body.ns-modern #access { display: none; }
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 180px), 1fr));
   gap: 10px;
-  width: min(900px, 100%);
+  width: 100%;
   margin: 0 0 18px;
 }
 .ns-metric { min-height: 80px; padding: 13px 14px; border: 1px solid var(--ns-line); border-radius: 7px; background: var(--ns-surface); box-shadow: var(--ns-shadow); }
@@ -244,8 +264,16 @@ body.ns-modern button:focus-visible, #ns-style-select:focus-visible { outline: 2
 .ns-error { margin: 18px 0; padding: 16px !important; border: 1px solid var(--ns-danger) !important; border-radius: 7px; background: color-mix(in srgb, var(--ns-danger) 12%, var(--ns-surface)) !important; color: var(--ns-text) !important; text-shadow: none !important; }
 
 body.ns-modern footer.meta { max-width: 700px; margin: 48px 0 0; padding: 16px 0; border: 0; border-top: 1px solid var(--ns-line); background: transparent; color: var(--ns-muted); font-size: 12px; }
-body.ns-modern #about { width: min(1120px, 100%); margin: 28px auto 0; color: var(--ns-muted); font-size: 12px; }
+body.ns-modern #about { width: min(var(--ns-content-width), 100%); margin: 28px auto 0; color: var(--ns-muted); font-size: 12px; }
 body.ns-modern .ns-main > p { max-width: 700px; }
+
+.ns-chart-toolbar { flex-wrap: wrap; }
+:root[data-npm-stat-style] .ns-chart-toolbar.ns-aggregation { justify-content: flex-start; gap: 6px; }
+:root[data-npm-stat-style] .ns-chart-toolbar.ns-aggregation button { margin: 0; min-height: 32px; min-width: 44px; padding: 5px 9px; border: 1px solid var(--ns-line); border-radius: var(--ns-control-radius); background: var(--ns-surface-subtle); color: var(--ns-text); box-shadow: none; }
+:root[data-npm-stat-style] .ns-chart-toolbar.ns-aggregation button.is-active { background: var(--ns-accent); border-color: var(--ns-accent); color: var(--ns-on-accent); }
+:root[data-npm-stat-style] .ns-chart-toolbar.ns-aggregation button[data-mode] { margin-left: 6px; min-width: 76px; }
+.ns-log-note { color: var(--ns-muted); font-size: 12px; margin: 0 0 10px; }
+.ns-log-note[hidden] { display: none; }
 
 @media (max-width: 680px) {
   body.ns-modern { padding: 0 16px 40px; }

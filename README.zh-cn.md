@@ -1,0 +1,112 @@
+# 📊 npm-stat Modern UI
+
+[English](README.md) | [简体中文](README.zh-cn.md)
+
+[![npm-stat.com](https://img.shields.io/badge/npm--stat.com-CB3837?logo=npm&logoColor=white)](https://npm-stat.com/) 一个将 npm-stat.com 查询和图表页面现代化的 Tampermonkey 用户脚本。
+
+## 🔨 构建
+
+```powershell
+npm install
+npm run build
+```
+
+独立用户脚本生成于：
+
+```text
+dist/npm-stat-modern-ui.user.js
+```
+
+`dist/` 在本地生成，不提交到仓库。
+
+## 📥 本地安装
+
+1. 如果之前安装过 `npm-stat Modern UI (Development Loader)`，请在 Tampermonkey 中禁用或删除它。
+2. 在 Tampermonkey 中新建用户脚本。
+3. 用 `dist/npm-stat-modern-ui.user.js` 的完整内容替换脚本内容，然后保存。
+4. 刷新 `https://npm-stat.com/charts.html?package=koishi-plugin-cs-lookup-vincentzyu-fork`。
+
+## ✅ 验证
+
+```powershell
+npm run check
+```
+
+此命令会执行 TypeScript 类型检查、图表数据测试，生成用户脚本，验证其元数据，并检查生成文件的语法。
+
+## 🧪 示例测试链接
+
+每条链接对比五个包。前四组覆盖 **2015-01-01 至 2026-09-15**；Koishi 示例覆盖 **2025-09-16 至 2026-09-15**，与排名统计区间一致。链接不包含 UI 参数，方便你使用自己的外观和聚合偏好。
+
+### 🌐 1. 前端开发
+
+`react`, `vue`, `svelte`, `preact`, `@angular/core`。
+
+https://npm-stat.com/charts.html?package=react&package=vue&package=svelte&package=preact&package=%40angular%2Fcore&from=2015-01-01&to=2026-09-15 — 框架历史、不同下载量级及带作用域的包名。
+
+### ⚙️ 2. 后端开发
+
+`express`, `koa`, `fastify`, `@nestjs/core`, `@hapi/hapi`。
+
+https://npm-stat.com/charts.html?package=express&package=koa&package=fastify&package=%40nestjs%2Fcore&package=%40hapi%2Fhapi&from=2015-01-01&to=2026-09-15 — 多条数据序列、周/月总量及均值与总量聚合对比。
+
+### 🖥️ 3. 桌面开发
+
+`electron`, `electron-builder`, `@electron/packager`, `@tauri-apps/api`, `nw`。
+
+https://npm-stat.com/charts.html?package=electron&package=electron-builder&package=%40electron%2Fpackager&package=%40tauri-apps%2Fapi&package=nw&from=2015-01-01&to=2026-09-15 — 桌面运行时与工具链、长包名及差异较大的曲线。
+
+### 🧰 4. 通用开发
+
+`typescript`, `lodash`, `rxjs`, `dayjs`, `zod`。
+
+https://npm-stat.com/charts.html?package=typescript&package=lodash&package=rxjs&package=dayjs&package=zod&from=2015-01-01&to=2026-09-15 — 高下载量、长周期聚合及缩放。
+
+### 🧩 5. 我的 Koishi 插件
+
+`koishi-plugin-awa-quote-image`, `koishi-plugin-music-link-vincentzyu-fork`, `koishi-plugin-onebot-info-image`, `koishi-plugin-wydashen-guangyi-query`, `koishi-plugin-get-qq-bot-transfer-link`。
+
+https://npm-stat.com/charts.html?package=koishi-plugin-awa-quote-image&package=koishi-plugin-music-link-vincentzyu-fork&package=koishi-plugin-onebot-info-image&package=koishi-plugin-wydashen-guangyi-query&package=koishi-plugin-get-qq-bot-transfer-link&from=2025-09-16&to=2026-09-15 — 个人项目、较低下载量、零下载时段及峰值。
+
+部分包在查询起始日期之后才发布，因此早期时段可能没有下载记录。npm 下载量不等于用户数；这些分组用于测试图表，并非不同类型工具之间的直接热度排名。
+
+### 🏆 Koishi 筛选与年度排名
+
+快照查询于 **2026-09-16**，采用 npm Downloads API 在 **2025-09-16 至 2026-09-15** 期间的统计。候选包来自本地 Koishi 项目的 `external` 目录，以实际的 `package.json.name` 为准。仅纳入已发布到 npm Registry、且维护者包含 `vincentzyu` 的包。未发布的实验项目及由其他人维护的上游包均已排除。
+
+| 排名 | 包名 | 区间内下载量 |
+| --- | --- | ---: |
+| 1 | `koishi-plugin-awa-quote-image` | 8,041 |
+| 2 | `koishi-plugin-music-link-vincentzyu-fork` | 6,802 |
+| 3 | `koishi-plugin-onebot-info-image` | 4,567 |
+| 4 | `koishi-plugin-wydashen-guangyi-query` | 3,479 |
+| 5 | `koishi-plugin-get-qq-bot-transfer-link` | 3,008 |
+
+此排名仅覆盖符合条件且有可用统计的本地候选包，不代表整个 Koishi 市场。已发布但 Downloads API 尚无可用统计的包不按零下载处理，也不参与排名；本次快照中包括 `koishi-plugin-steam-vincentzyu`。
+
+## 🎨 七种外观风格
+
+使用右上角下拉框选择原始 npm-stat、npm、Vercel、Fluent、Material 3、Apple（iOS/macOS）或 GitHub。旁边的 emoji 按钮独立循环切换跟随系统/浅色/深色。两项偏好都会保存；默认风格为 npm。切换时保留表单输入、图表缩放、图例选择及日图坐标尺度，不重新获取数据。
+
+原始风格恢复更简洁的外观，同时保留 ECharts 和查询增强功能。公共布局位于 `src/styles.css`；每种风格在 `src/styles/` 下都有独立的浅色/深色 CSS。所有样式均在本地打包进用户脚本。数据与图表逻辑位于 `src/data.ts` 和 `src/renderer.ts`；Vite 类型声明位于 `src/vite.d.ts`。
+
+## 📈 长周期图表与聚合
+
+内容区域最大宽度为 2500px，图表线宽为 1px（悬停时为 1.5px）。日图和周图各有八档分组大小：1、2、3、4、5、10、25 和 50，另有一个均值/总量切换按钮。两张图独立设置，默认分组大小为 1、口径为均值，并记住手动修改。日图的 Linear/Log 切换仍然独立；对数轴不绘制零值，也不会用正数替代零值。
+
+分组始终从完整查询范围的起点开始，不受缩放影响。各包按相同边界分别聚合。均值按实际包含的天数或周数计算，零下载时段也计入分母；总量则对下载量求和。末尾不足一组的数据会保留。周均值对提供的每周总量取平均，包含首尾不完整周，不推算完整周下载量。悬停提示显示完整 ISO 周名、覆盖日期、实际分组大小和总量。摘要指标始终使用原始日数据。
+
+## 🔗 分享设置
+
+直接复制地址栏即可：设置通过 `history.replaceState` 自动更新，不刷新页面，也不新增历史记录。无需分享按钮。支持以下参数：
+
+| 参数 | 取值 |
+| --- | --- |
+| `ui_style` | `original`, `npm`, `vercel`, `fluent`, `material`, `apple`, `github` |
+| `ui_theme` | `system`, `light`, `dark` |
+| `ui_day_size`, `ui_week_size` | `1`, `2`, `3`, `4`, `5`, `10`, `25`, `50` |
+| `ui_day_mode`, `ui_week_mode` | `mean`, `sum` |
+
+每项设置依次从有效 URL 值、本地记忆、默认值中解析。打开分享链接不会覆盖已保存的偏好，仅保存你手动修改的设置。`system` 跟随接收者的系统；使用 `light` 或 `dark` 可分享固定外观。提交查询和访问同站图表链接时会携带当前设置。包名、日期、其他参数和 URL 片段会按需保留。缩放、隐藏的图例项及 Linear/Log 不会序列化到链接中。
+
+未安装此用户脚本的用户仍可打开查询；只有 UI 增强功能需要安装脚本。

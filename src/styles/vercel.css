@@ -1,3 +1,7 @@
+:root[data-npm-stat-style='vercel'] .ns-chart-indicator { color: var(--ns-text); }
+:root[data-npm-stat-style='vercel'] .ns-chart-indicator svg { display: none; }
+:root[data-npm-stat-style='vercel'] .ns-chart-indicator::before { content: ''; position: absolute; top: 15px; width: 32px; height: 2px; background: currentColor; animation: ns-loader-pulse 1.5s ease-in-out infinite; }
+
 :root[data-npm-stat-style='vercel'] {
   --ns-page: #fff;
   --ns-surface: #fafafa;

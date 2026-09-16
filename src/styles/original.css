@@ -1,3 +1,5 @@
+:root[data-npm-stat-style='original'] .ns-chart-indicator { --ns-loader-rotation: ns-loading-spin 1s linear infinite; color: #cb3837; }
+
 :root[data-npm-stat-style='original'] {
   --ns-page: #fff;
   --ns-surface: #fff;

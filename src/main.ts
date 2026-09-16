@@ -1,4 +1,5 @@
 import styles from './styles.css?raw';
+import { syncChartLoading } from './loading';
 import { installChartRenderer, refreshRenderedCharts, type ResolvedTheme } from './renderer';
 import original from './styles/original.css?raw';
 import npm from './styles/npm.css?raw';
@@ -7,23 +8,11 @@ import fluent from './styles/fluent.css?raw';
 import material from './styles/material.css?raw';
 import apple from './styles/apple.css?raw';
 import github from './styles/github.css?raw';
+import { appearances, initializePreferences, getPreferences, setPreference, preferencesUrl, queryUrl, type Appearance, type ThemePreference } from './preferences';
 
-const appearances = { original: 'Original npm-stat', npm: 'npm', vercel: 'Vercel', fluent: 'Fluent', material: 'Material 3', apple: 'Apple', github: 'GitHub' };
-type Appearance = keyof typeof appearances;
-const appearanceKey = 'npm-stat-modern-ui-style';
-const savedAppearance = window.localStorage.getItem(appearanceKey);
-let appearance: Appearance = savedAppearance && Object.prototype.hasOwnProperty.call(appearances, savedAppearance) ? savedAppearance as Appearance : 'npm';
-
-type ThemePreference = 'system' | 'light' | 'dark';
-
-const themeStorageKey = 'npm-stat-modern-ui-theme';
+initializePreferences();
 const systemThemeQuery = window.matchMedia('(prefers-color-scheme: dark)');
-let currentPreference: ThemePreference = readThemePreference();
-
-function readThemePreference(): ThemePreference {
-  const saved = window.localStorage.getItem(themeStorageKey);
-  return saved === 'light' || saved === 'dark' || saved === 'system' ? saved : 'system';
-}
+let currentPreference: ThemePreference = getPreferences().theme;
 
 function resolvedTheme(preference = currentPreference): ResolvedTheme {
   return preference === 'system' ? (systemThemeQuery.matches ? 'dark' : 'light') : preference;
@@ -40,14 +29,14 @@ function injectStyles(): void {
 
 function setTheme(preference: ThemePreference): void {
   currentPreference = preference;
-  window.localStorage.setItem(themeStorageKey, preference);
+  setPreference('theme', preference);
   applyTheme();
 }
 
 function applyTheme(): void {
   const theme = resolvedTheme();
   document.documentElement.dataset.npmStatTheme = theme;
-  document.documentElement.dataset.npmStatStyle = appearance;
+  document.documentElement.dataset.npmStatStyle = getPreferences().style;
   document.documentElement.dataset.npmStatThemePreference = currentPreference;
   updateThemeButton();
   refreshRenderedCharts(theme);
@@ -91,10 +80,9 @@ function installThemeToggle(topbar: HTMLElement): void {
   for (const [value, label] of Object.entries(appearances)) {
     select.add(new Option(label, value));
   }
-  select.value = appearance;
+  select.value = getPreferences().style;
   select.addEventListener('change', () => {
-    appearance = select.value as Appearance;
-    window.localStorage.setItem(appearanceKey, appearance);
+    setPreference('style', select.value as Appearance);
     applyTheme();
   });
   controls.append(select, button);
@@ -144,6 +132,7 @@ function addDateShortcuts(form: HTMLFormElement): void {
 }
 
 function enhanceDynamicContent(): void {
+  syncChartLoading();
   document.querySelectorAll<HTMLElement>('figure.full').forEach((figure) => figure.classList.add('ns-chart'));
   document.querySelectorAll<HTMLTableElement>('table.alternating').forEach((table) => table.classList.add('ns-results-table'));
   document.querySelectorAll<HTMLElement>('#loading').forEach((element) => element.classList.add('ns-loading'));
@@ -181,6 +170,13 @@ function decoratePage(): void {
     form.classList.add('ns-query-form');
     form.querySelector('table')?.classList.add('ns-query-table');
     addDateShortcuts(form);
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      const kind = form.querySelector<HTMLSelectElement>('#nameType')?.value === 'author' ? 'author' : 'package';
+      const value = (id: string) => form.querySelector<HTMLInputElement>(id)?.value || '';
+      window.location.assign(queryUrl(new URL(window.location.href), kind, value('#name'), value('#from'), value('#to'), getPreferences()).href);
+    }, true);
   }
 
   if (window.location.pathname.endsWith('/charts.html')) document.body.classList.add('ns-chart-page');
@@ -188,6 +184,17 @@ function decoratePage(): void {
 
   const observer = new MutationObserver(enhanceDynamicContent);
   observer.observe(content, { childList: true, subtree: true });
+
+  // Update generated query links without replacing the original destination or click behavior.
+  const carryPreferences = (event: Event) => {
+    const link = event.target instanceof Element ? event.target.closest<HTMLAnchorElement>('a[href]') : null;
+    if (!link) return;
+    const url = new URL(link.href);
+    if (url.origin === window.location.origin && url.pathname === '/charts.html') link.href = preferencesUrl(url, getPreferences()).href;
+  };
+  document.addEventListener('click', carryPreferences, true);
+  document.addEventListener('auxclick', carryPreferences, true);
+  document.addEventListener('contextmenu', carryPreferences, true);
 }
 
 function boot(): void {

@@ -1,4 +1,5 @@
 import * as echarts from 'echarts/core';
+import { chartState } from './loading';
 import { LineChart } from 'echarts/charts';
 import {
   DataZoomComponent,
@@ -13,9 +14,12 @@ import {
   calculateDownloadMetrics,
   isDailyChart,
   normalizeSeriesData,
+  aggregateSeries, calendarDay, completeCategories, dateLabel, remapZoom,
+  type Aggregation, type Bucket,
   type DownloadMetrics,
   type LegacyChartOptions
 } from './data';
+import { getPreferences, setPreference, sizes } from './preferences';
 
 echarts.use([
   LineChart,
@@ -35,6 +39,7 @@ interface ChartRecord {
   options: LegacyChartOptions;
   resizeObserver: ResizeObserver;
   scale: ChartScale;
+  buckets: Bucket[];
 }
 
 type LegacyChartConstructor = new (options: LegacyChartOptions, callback?: unknown) => unknown;
@@ -85,6 +90,45 @@ function targetId(renderTo: unknown): string {
   return '';
 }
 
+function aggregationFor(id: string, options: LegacyChartOptions): Aggregation | null {
+  if (id !== 'days' && id !== 'weeks') return null;
+  const preferences = getPreferences();
+  const daily = id === 'days';
+  const metrics = calculateDownloadMetrics(chartRecords.get('days')?.options.series || []);
+  const coverage = metrics ? { from: calendarDay(metrics.from), to: calendarDay(metrics.to) } : undefined;
+  return aggregateSeries(options, daily ? 'day' : 'week', daily ? preferences.daySize : preferences.weekSize,
+    daily ? preferences.dayMode : preferences.weekMode, coverage);
+}
+
+function aggregationTooltip(aggregation: Aggregation, unit: string, size: number, mode: string, raw: unknown): HTMLElement {
+  const entries = (Array.isArray(raw) ? raw : [raw]) as Array<{ dataIndex: number; seriesIndex: number; color?: string }>;
+  const index = entries[0]?.dataIndex;
+  const bucket = aggregation.buckets[index];
+  const box = document.createElement('div');
+  box.style.cssText = 'max-width:min(420px,80vw);white-space:normal;overflow-wrap:anywhere;line-height:1.6';
+  if (!bucket) return box;
+  const heading = document.createElement('strong');
+  const weekLabel = (label: string) => `${label}（第 ${Number(label.slice(-2))} 周）`;
+  heading.textContent = unit === 'week'
+    ? `${weekLabel(bucket.first)}${bucket.first === bucket.last ? '' : ' → ' + weekLabel(bucket.last)}`
+    : `${dateLabel(bucket.start)}${bucket.start === bucket.end ? '' : ' → ' + dateLabel(bucket.end)}`;
+  box.append(heading);
+  const detail = document.createElement('div');
+  detail.textContent = `${unit === 'week' ? dateLabel(bucket.start) + ' → ' + dateLabel(bucket.end) + ' · ' : ''}${bucket.count}/${size} ${unit === 'day' ? '天' : '周'}${bucket.partial ? ' · 含不完整周' : ''} · ${mode === 'mean' ? '均值' : '总量'}`;
+  box.append(detail);
+  for (const entry of entries) {
+    const series = aggregation.series[entry.seriesIndex];
+    if (!series) continue;
+    const row = document.createElement('div');
+    const marker = document.createElement('span');
+    marker.textContent = '● ';
+    marker.style.color = entry.color || 'currentColor';
+    row.append(marker, `${series.name}: ${new Intl.NumberFormat('en-US', { maximumFractionDigits: 2 }).format(series.values[index])} · 总量 ${numberFormatter.format(series.totals[index])}`);
+    box.append(row);
+  }
+  return box;
+}
+
 function buildOption(
   id: string,
   legacy: LegacyChartOptions,
@@ -94,18 +138,24 @@ function buildOption(
   const daily = isDailyChart(legacy);
   const tokens = chartTokens(theme);
   const series = legacy.series || [];
-  const categories = legacy.xAxis?.categories || [];
+  const originalCategories = completeCategories(legacy);
+  const aggregation = aggregationFor(id, legacy);
+  const preferences = getPreferences();
+  const size = id === 'days' ? preferences.daySize : preferences.weekSize;
+  const mode = id === 'days' ? preferences.dayMode : preferences.weekMode;
+  const unit = id === 'days' ? 'day' : 'week';
+  const categories = aggregation ? aggregation.buckets.map(bucket => bucket.first) : originalCategories;
   const hasLegend = series.length > 1;
   const dailyChart = id === 'days' && daily;
   const weeklyChart = id === 'weeks';
-  const hasZoomControl = dailyChart || (weeklyChart && categories.length > 26);
+  const hasZoomControl = dailyChart || (weeklyChart && originalCategories.length > 26);
 
   return {
     animationDuration: 240,
     color: colorsFor(theme),
     textStyle: { fontFamily: tokens.font },
     title: {
-      text: legacy.title?.text || 'Downloads',
+      text: aggregation ? `Downloads · ${size} ${unit}${size > 1 ? 's' : ''} · ${mode === 'mean' ? 'mean' : 'total'}` : legacy.title?.text || 'Downloads',
       left: 0,
       top: 0,
       textStyle: { color: tokens.text, fontSize: 16, fontWeight: 700 }
@@ -118,7 +168,8 @@ function buildOption(
       borderWidth: 1,
       padding: [10, 12],
       textStyle: { color: tokens.text, fontSize: 12 },
-      valueFormatter: (value: unknown) => numberFormatter.format(Number(value) || 0)
+      valueFormatter: (value: unknown) => numberFormatter.format(Number(value) || 0),
+      ...(aggregation ? { formatter: (params: unknown) => aggregationTooltip(aggregation, unit, size, mode, params) } : {})
     },
     legend: {
       type: 'scroll',
@@ -139,7 +190,7 @@ function buildOption(
       left: 68,
       containLabel: false
     },
-    xAxis: daily
+    xAxis: daily && !aggregation
       ? {
           type: 'time',
           name: legacy.xAxis?.title?.text || '',
@@ -170,9 +221,9 @@ function buildOption(
         },
     yAxis: {
       type: scale === 'log' ? 'log' : 'value',
-      min: scale === 'log' ? 1 : 0,
+      min: scale === 'log' ? undefined : 0,
       logBase: scale === 'log' ? 10 : undefined,
-      name: legacy.yAxis?.title?.text || 'Downloads',
+      name: aggregation ? mode === 'mean' ? `Downloads / ${unit}` : 'Downloads / group' : legacy.yAxis?.title?.text || 'Downloads',
       nameTextStyle: { color: tokens.muted, fontSize: 11, fontWeight: 600 },
       axisLabel: {
         color: tokens.muted,
@@ -198,18 +249,68 @@ function buildOption(
           }
         ]
       : [],
-    series: series.map((item) => ({
+    series: series.map((item, index) => ({
       name: item.name || 'package',
       type: 'line',
       smooth: false,
-      showSymbol: false,
+      showSymbol: aggregation?.buckets.length === 1,
       symbol: 'circle',
       symbolSize: 6,
-      lineStyle: { width: 2.5 },
-      emphasis: { focus: 'series', scale: true, lineStyle: { width: 3 } },
-      data: normalizeSeriesData(item, daily)
+      lineStyle: { width: 1 },
+      emphasis: { focus: 'series', scale: true, lineStyle: { width: 1.5 } },
+      data: aggregation ? aggregation.series[index].values.map(value => scale === 'log' && value <= 0 ? null : value) : normalizeSeriesData(item, daily)
     }))
   };
+}
+
+function installAggregationControl(figure: HTMLElement): void {
+  const id = figure.id;
+  if (document.getElementById(`${id}-aggregation`)) return;
+  const daily = id === 'days';
+  const toolbar = document.createElement('div');
+  toolbar.id = `${id}-aggregation`;
+  toolbar.className = 'ns-chart-toolbar ns-aggregation';
+  toolbar.setAttribute('role', 'group');
+  toolbar.setAttribute('aria-label', daily ? 'Daily aggregation' : 'Weekly aggregation');
+  const sizeKey = daily ? 'daySize' : 'weekSize';
+  const modeKey = daily ? 'dayMode' : 'weekMode';
+  const refresh = () => {
+    const preferences = getPreferences();
+    toolbar.querySelectorAll<HTMLButtonElement>('button[data-size]').forEach(button => {
+      const active = Number(button.dataset.size) === preferences[sizeKey];
+      button.classList.toggle('is-active', active);
+      button.setAttribute('aria-pressed', String(active));
+    });
+    const modeButton = toolbar.querySelector<HTMLButtonElement>('button[data-mode]')!;
+    modeButton.textContent = `${preferences[modeKey] === 'mean' ? '均值' : '总量'} ⇄`;
+    modeButton.setAttribute('aria-label', `当前${preferences[modeKey] === 'mean' ? '均值，切换为总量' : '总量，切换为均值'}`);
+  };
+  for (const size of sizes) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.dataset.size = String(size);
+    button.textContent = `${size}${daily ? '天' : '周'}`;
+    button.addEventListener('click', () => {
+      const record = chartRecords.get(id);
+      if (!record) return;
+      setPreference(sizeKey, size);
+      updateChart(record, id, getTheme(), true);
+      refresh();
+    });
+    toolbar.append(button);
+  }
+  const modeButton = document.createElement('button');
+  modeButton.type = 'button';
+  modeButton.dataset.mode = '';
+  modeButton.addEventListener('click', () => {
+    setPreference(modeKey, getPreferences()[modeKey] === 'mean' ? 'sum' : 'mean');
+    const record = chartRecords.get(id);
+    if (record) updateChart(record, id, getTheme());
+    refresh();
+  });
+  toolbar.append(modeButton);
+  refresh();
+  figure.before(toolbar);
 }
 
 function installScaleControl(figure: HTMLElement): void {
@@ -251,6 +352,12 @@ function installScaleControl(figure: HTMLElement): void {
   });
 
   figure.before(toolbar);
+  const note = document.createElement('p');
+  note.className = 'ns-log-note';
+  note.id = `${figure.id}-log-note`;
+  note.textContent = '对数轴不绘制零值；切回 Linear 查看零下载。';
+  note.hidden = true;
+  toolbar.after(note);
 }
 
 function createMetric(label: string, value: string, detail?: string): HTMLElement {
@@ -294,25 +401,39 @@ function renderChart(id: string, options: LegacyChartOptions): void {
   const existing = chartRecords.get(id);
   existing?.resizeObserver.disconnect();
   existing?.chart.dispose();
+  chartRecords.delete(id);
 
   figure.classList.add('ns-chart');
   figure.replaceChildren();
+  chartState(figure, 'ready');
+  if (!(options.series || []).some(series => normalizeSeriesData(series, isDailyChart(options)).length > 0)) {
+    chartState(figure, 'empty');
+    return;
+  }
+  chartState(figure, 'rendering');
   const host = document.createElement('div');
   host.className = 'ns-echart';
   figure.append(host);
 
   const chart = echarts.init(host, undefined, { renderer: 'canvas' });
+  const onRendered = () => {
+    chart.off('rendered', onRendered);
+    chartState(figure, 'ready');
+  };
+  chart.on('rendered', onRendered);
   const resizeObserver = new ResizeObserver(() => chart.resize());
   resizeObserver.observe(figure);
   const scale = existing?.scale || 'linear';
-  chartRecords.set(id, { chart, options, resizeObserver, scale });
+  chartRecords.set(id, { chart, options, resizeObserver, scale, buckets: [] });
   chart.setOption(buildOption(id, options, getTheme(), scale), true);
+  chartRecords.get(id)!.buckets = aggregationFor(id, options)?.buckets || [];
 
   if (id === 'days') {
     const metrics = calculateDownloadMetrics(options.series || []);
     if (metrics) renderMetrics(metrics);
     installScaleControl(figure);
   }
+  if (id === 'days' || id === 'weeks') installAggregationControl(figure);
 }
 
 export function installChartRenderer(themeResolver: () => ResolvedTheme): void {
@@ -324,7 +445,13 @@ export function installChartRenderer(themeResolver: () => ResolvedTheme): void {
   function ModernChart(options: LegacyChartOptions, callback?: unknown): unknown {
     const id = targetId(options?.chart?.renderTo);
     if (!chartIds.has(id)) return Reflect.construct(originalChart, [options, callback]);
-    renderChart(id, options);
+    try {
+      renderChart(id, options);
+    } catch (error) {
+      const figure = document.getElementById(id);
+      if (figure) chartState(figure, 'error');
+      console.error('[npm-stat Modern UI] Chart rendering failed:', error);
+    }
     return undefined;
   }
 
@@ -340,18 +467,22 @@ export function refreshRenderedCharts(theme: ResolvedTheme): void {
   });
 }
 
-function updateChart(record: ChartRecord, id: string, theme: ResolvedTheme): void {
+function updateChart(record: ChartRecord, id: string, theme: ResolvedTheme, regroup = false): void {
   const previous = record.chart.getOption() as {
     dataZoom?: Array<{ start?: number; end?: number }>;
     legend?: Array<{ selected?: Record<string, boolean> }>;
   };
   const option = buildOption(id, record.options, theme, record.scale);
+  const newBuckets = aggregationFor(id, record.options)?.buckets || [];
+  const start = previous.dataZoom?.[0]?.start ?? 0;
+  const end = previous.dataZoom?.[0]?.end ?? 100;
+  const zoomRange = regroup ? remapZoom(record.buckets, newBuckets, start, end) : { start, end };
   if (Array.isArray(option.dataZoom)) {
-    option.dataZoom.forEach((zoom, index) => Object.assign(zoom, {
-      start: previous.dataZoom?.[index]?.start ?? 0,
-      end: previous.dataZoom?.[index]?.end ?? 100
-    }));
+    option.dataZoom.forEach(zoom => Object.assign(zoom, zoomRange));
   }
   Object.assign(option.legend as object, { selected: previous.legend?.[0]?.selected || {} });
   record.chart.setOption(option, true);
+  record.buckets = newBuckets;
+  const note = document.getElementById(`${id}-log-note`);
+  if (note) note.hidden = record.scale !== 'log';
 }

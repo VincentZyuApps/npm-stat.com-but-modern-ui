@@ -1,3 +1,7 @@
+:root[data-npm-stat-style='fluent'] .ns-chart-indicator svg { display: none; }
+:root[data-npm-stat-style='fluent'] .ns-chart-indicator i:nth-of-type(-n+5) { display: block; position: absolute; inset: 0; animation: ns-loader-orbit 1.8s cubic-bezier(.55, .05, .35, .95) infinite; animation-delay: calc(var(--segment) * -.14s); }
+:root[data-npm-stat-style='fluent'] .ns-chart-indicator i::before { content: ''; position: absolute; top: 2px; left: 14px; width: 4px; height: 4px; border-radius: 50%; background: currentColor; }
+
 :root[data-npm-stat-style='fluent'] {
   --ns-page: #edf2f7;
   --ns-surface: #fafcfe;

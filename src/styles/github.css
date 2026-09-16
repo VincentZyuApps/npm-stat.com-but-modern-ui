@@ -1,3 +1,6 @@
+:root[data-npm-stat-style='github'] .ns-chart-indicator { width: 24px; height: 24px; --ns-loader-rotation: ns-loading-spin 1s linear infinite; }
+:root[data-npm-stat-style='github'] .ns-chart-indicator circle { stroke-width: 2; stroke-dasharray: 48 76; }
+
 :root[data-npm-stat-style='github'] {
   --ns-page: #fff;
   --ns-surface: #fff;

@@ -1,3 +1,7 @@
+:root[data-npm-stat-style='apple'] .ns-chart-indicator { color: var(--ns-muted); }
+:root[data-npm-stat-style='apple'] .ns-chart-indicator svg { display: none; }
+:root[data-npm-stat-style='apple'] .ns-chart-indicator i { display: block; position: absolute; left: 14px; top: 2px; width: 3px; height: 8px; border-radius: 2px; background: currentColor; transform-origin: 1.5px 14px; transform: rotate(calc(var(--segment) * 30deg)); opacity: .2; animation: ns-loader-fade 1.2s linear infinite; animation-delay: calc(var(--segment) * .1s - 1.2s); }
+
 :root[data-npm-stat-style='apple'] {
   --ns-page: #f2f2f7;
   --ns-surface: #fff;

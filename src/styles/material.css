@@ -1,3 +1,6 @@
+:root[data-npm-stat-style='material'] .ns-chart-indicator { --ns-loader-rotation: ns-loading-spin 2s cubic-bezier(.4, 0, .2, 1) infinite; --ns-loader-arc: ns-loader-stretch 1.5s cubic-bezier(.4, 0, .2, 1) infinite; }
+:root[data-npm-stat-style='material'] .ns-chart-indicator circle { stroke-width: 3; }
+
 :root[data-npm-stat-style='material'] {
   --ns-page: #fef7ff;
   --ns-surface: #f7f2fa;
