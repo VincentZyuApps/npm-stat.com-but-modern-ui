@@ -57,6 +57,8 @@ In **Settings -> Secrets and variables -> Actions**, create these repository sec
 | `GITEE_PRIVATE_KEY` | A dedicated SSH private key for the Gitee mirror action. |
 | `GITEE_TOKEN` | A dedicated Gitee personal access token with write access to the mirror repository and Release API. |
 
+Release modes validate both secrets before creating a GitHub Release. A missing credential therefore fails safely before any public Release or Pages deployment is created.
+
 Generate an isolated key instead of sharing a personal daily-use key:
 
 ```powershell

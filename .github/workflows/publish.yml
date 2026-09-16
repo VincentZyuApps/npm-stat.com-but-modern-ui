@@ -129,8 +129,22 @@ jobs:
           path: pages/
           retention-days: 7
 
+  validate-gitee-secrets:
+    needs: select-mode
+    if: needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Require Gitee mirror credentials
+        env:
+          GITEE_PRIVATE_KEY: ${{ secrets.GITEE_PRIVATE_KEY }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+        run: |
+          set -euo pipefail
+          test -n "${GITEE_PRIVATE_KEY}" || { echo '::error::GITEE_PRIVATE_KEY is not configured.'; exit 1; }
+          test -n "${GITEE_TOKEN}" || { echo '::error::GITEE_TOKEN is not configured.'; exit 1; }
+
   publish-release:
-    needs: [select-mode, build]
+    needs: [select-mode, build, validate-gitee-secrets]
     if: needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish'
     runs-on: ubuntu-latest
     steps:
@@ -187,7 +201,7 @@ jobs:
           fi
 
   sync-gitee-code:
-    needs: select-mode
+    needs: [select-mode, validate-gitee-secrets]
     if: needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish'
     runs-on: ubuntu-latest
     steps:
