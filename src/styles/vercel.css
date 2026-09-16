@@ -1,0 +1,35 @@
+:root[data-npm-stat-style='vercel'] {
+  --ns-page: #fff;
+  --ns-surface: #fafafa;
+  --ns-surface-subtle: #f2f2f2;
+  --ns-text: #171717;
+  --ns-muted: #666;
+  --ns-line: #dedede;
+  --ns-accent: #171717;
+  --ns-accent-strong: #333;
+  --ns-on-accent: #fff;
+  --ns-link: #0068d6;
+  --ns-radius: 2px;
+  --ns-control-radius: 3px;
+  --ns-font: Arial, system-ui, sans-serif;
+  --ns-shadow: none;
+}
+:root[data-npm-stat-style='vercel'][data-npm-stat-theme='dark'] {
+  --ns-page: #000;
+  --ns-surface: #0a0a0a;
+  --ns-surface-subtle: #171717;
+  --ns-text: #ededed;
+  --ns-muted: #a1a1a1;
+  --ns-line: #292929;
+  --ns-accent: #ededed;
+  --ns-accent-strong: #ccc;
+  --ns-on-accent: #000;
+  --ns-link: #52a8ff;
+}
+:root[data-npm-stat-style='vercel'] .ns-main h2 { letter-spacing: -.045em; }
+:root[data-npm-stat-style='vercel'] .ns-metric-label { font-family: ui-monospace, monospace; }
+:root[data-npm-stat-style='vercel'] .ns-query-form { padding: 18px; }
+:root[data-npm-stat-style='vercel'] #ns-style-select { border-radius: 3px; }
+:root[data-npm-stat-style='vercel'] .ns-chart-toolbar button { border-radius: 3px; }
+:root[data-npm-stat-style='vercel'] .ns-chart-toolbar button:first-of-type { border-radius: 3px 0 0 3px; }
+:root[data-npm-stat-style='vercel'] .ns-chart-toolbar button:last-of-type { border-radius: 0 3px 3px 0; }

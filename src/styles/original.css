@@ -1,0 +1,33 @@
+:root[data-npm-stat-style='original'] {
+  --ns-page: #fff;
+  --ns-surface: #fff;
+  --ns-surface-subtle: #f5f5f5;
+  --ns-text: #222;
+  --ns-muted: #555;
+  --ns-line: #ccc;
+  --ns-accent: #a32c36;
+  --ns-accent-strong: #84212a;
+  --ns-on-accent: #fff;
+  --ns-link: #0645ad;
+  --ns-radius: 0px;
+  --ns-control-radius: 2px;
+  --ns-font: Arial, sans-serif;
+  --ns-shadow: none;
+}
+:root[data-npm-stat-style='original'][data-npm-stat-theme='dark'] {
+  --ns-page: #181818;
+  --ns-surface: #181818;
+  --ns-surface-subtle: #242424;
+  --ns-text: #eee;
+  --ns-muted: #bbb;
+  --ns-line: #444;
+  --ns-accent: #ff9299;
+  --ns-accent-strong: #ffb2b7;
+  --ns-on-accent: #201012;
+  --ns-link: #8ab4f8;
+}
+:root[data-npm-stat-style='original'] .ns-query-form { border: 0; padding: 0; }
+:root[data-npm-stat-style='original'] .ns-chart { border: 0; }
+:root[data-npm-stat-style='original'] .ns-metric { border: 0; border-left: 2px solid var(--ns-line); }
+:root[data-npm-stat-style='original'] .ns-main h2 { font-size: 24px; }
+:root[data-npm-stat-style='original'] .ns-main { margin-top: 30px; }

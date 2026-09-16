@@ -1,0 +1,31 @@
+:root[data-npm-stat-style='fluent'] {
+  --ns-page: #edf2f7;
+  --ns-surface: #fafcfe;
+  --ns-surface-subtle: #e6edf4;
+  --ns-text: #202020;
+  --ns-muted: #536171;
+  --ns-line: #cbd3dd;
+  --ns-accent: #0067b8;
+  --ns-accent-strong: #005a9e;
+  --ns-on-accent: #fff;
+  --ns-link: #0067b8;
+  --ns-radius: 8px;
+  --ns-control-radius: 4px;
+  --ns-font: "Segoe UI", system-ui, sans-serif;
+  --ns-shadow: none;
+}
+:root[data-npm-stat-style='fluent'][data-npm-stat-theme='dark'] {
+  --ns-page: #20252c;
+  --ns-surface: #2b3038;
+  --ns-surface-subtle: #343b45;
+  --ns-text: #f5f5f5;
+  --ns-muted: #bcc5d0;
+  --ns-line: #48515e;
+  --ns-accent: #82c7ff;
+  --ns-accent-strong: #a8d8ff;
+  --ns-on-accent: #092239;
+  --ns-link: #82c7ff;
+}
+:root[data-npm-stat-style='fluent'] .ns-topbar { background: color-mix(in srgb,var(--ns-surface) 80%,transparent); backdrop-filter: blur(18px); padding: 0 12px; }
+:root[data-npm-stat-style='fluent'] .ns-query-table input:focus { border-bottom: 2px solid var(--ns-accent); }
+:root[data-npm-stat-style='fluent'] .ns-chart, :root[data-npm-stat-style='fluent'] .ns-query-form { box-shadow: 0 6px 18px rgb(0 0 0 / 12%); }

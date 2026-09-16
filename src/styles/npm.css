@@ -1,0 +1,30 @@
+:root[data-npm-stat-style='npm'] {
+  --ns-page: #fff;
+  --ns-surface: #fff;
+  --ns-surface-subtle: #f2f2f2;
+  --ns-text: #231f20;
+  --ns-muted: #626262;
+  --ns-line: #dedede;
+  --ns-accent: #e53935;
+  --ns-accent-strong: #c62828;
+  --ns-on-accent: #171717;
+  --ns-link: #1769aa;
+  --ns-radius: 4px;
+  --ns-control-radius: 2px;
+  --ns-font: system-ui, sans-serif;
+  --ns-shadow: none;
+}
+:root[data-npm-stat-style='npm'][data-npm-stat-theme='dark'] {
+  --ns-page: #191919;
+  --ns-surface: #202020;
+  --ns-surface-subtle: #2b2b2b;
+  --ns-text: #eee;
+  --ns-muted: #b5b5b5;
+  --ns-line: #404040;
+  --ns-accent: #ff8a80;
+  --ns-accent-strong: #ffb4ab;
+  --ns-on-accent: #27100d;
+  --ns-link: #8ab4f8;
+}
+:root[data-npm-stat-style='npm'] .ns-topbar { border-top: 5px solid transparent; border-image: linear-gradient(90deg,#f99b18,#e53935,#c42bd1) 1; }
+:root[data-npm-stat-style='npm'] .ns-main h2 em { font-style: normal; }

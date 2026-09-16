@@ -1,0 +1,49 @@
+:root[data-npm-stat-style='github'] {
+  --ns-page: #fff;
+  --ns-surface: #fff;
+  --ns-surface-subtle: #f6f8fa;
+  --ns-text: #1f2328;
+  --ns-muted: #59636e;
+  --ns-line: #d1d9e0;
+  --ns-accent: #1f883d;
+  --ns-accent-strong: #1a7f37;
+  --ns-on-accent: #fff;
+  --ns-link: #0969da;
+  --ns-radius: 6px;
+  --ns-control-radius: 6px;
+  --ns-font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ns-shadow: none;
+}
+:root[data-npm-stat-style='github'][data-npm-stat-theme='dark'] {
+  --ns-page: #0d1117;
+  --ns-surface: #0d1117;
+  --ns-surface-subtle: #161b22;
+  --ns-text: #f0f6fc;
+  --ns-muted: #9198a1;
+  --ns-line: #3d444d;
+  --ns-accent: #238636;
+  --ns-accent-strong: #2ea043;
+  --ns-on-accent: #fff;
+  --ns-link: #58a6ff;
+}
+:root[data-npm-stat-style='github'] .ns-topbar { background: var(--ns-surface-subtle); padding: 16px 20px; border-bottom: 1px solid var(--ns-line); }
+:root[data-npm-stat-style='github'][data-npm-stat-theme='dark'] .ns-topbar { background: #010409; }
+:root[data-npm-stat-style='github'] body.ns-modern { font-size: 14px; }
+:root[data-npm-stat-style='github'] .ns-main { margin-top: 32px; }
+:root[data-npm-stat-style='github'] .ns-main h2 { font-size: 24px; font-weight: 600; padding-bottom: 16px; border-bottom: 1px solid var(--ns-line); }
+:root[data-npm-stat-style='github'] .ns-main h2 em { color: var(--ns-link); font-style: normal; }
+:root[data-npm-stat-style='github'] .ns-query-form { padding: 16px; background: var(--ns-surface-subtle); }
+:root[data-npm-stat-style='github'] .ns-metric-label { text-transform: none; font-size: 12px; }
+:root[data-npm-stat-style='github'] .ns-query-table input,
+:root[data-npm-stat-style='github'] .ns-query-table select { min-height: 32px; padding: 5px 10px; font-size: 14px; box-shadow: inset 0 1px 0 rgb(0 0 0 / 4%); }
+:root[data-npm-stat-style='github'] .ns-query-table input[type='submit'] { box-shadow: inset 0 1px 0 rgb(255 255 255 / 15%), 0 1px 0 rgb(0 0 0 / 10%); }
+:root[data-npm-stat-style='github'] .ns-date-shortcuts button,
+:root[data-npm-stat-style='github'] .ns-chart-toolbar button:not(.is-active),
+:root[data-npm-stat-style='github'] #ns-style-select,
+:root[data-npm-stat-style='github'] #ns-theme-toggle { background: var(--ns-surface-subtle); color: var(--ns-text); font-weight: 500; }
+:root[data-npm-stat-style='github'] .ns-metrics { width: 100%; gap: 0; border: 1px solid var(--ns-line); border-radius: 6px; overflow: hidden; background: var(--ns-surface); }
+:root[data-npm-stat-style='github'] .ns-metric { border: 0; border-radius: 0; padding: 16px; box-shadow: inset 1px 0 var(--ns-line); }
+:root[data-npm-stat-style='github'] .ns-metric:first-child { box-shadow: none; }
+:root[data-npm-stat-style='github'] .ns-metric strong { font-weight: 600; }
+:root[data-npm-stat-style='github'] .ns-chart { background: linear-gradient(var(--ns-surface-subtle) 0 42px, var(--ns-surface) 42px); }
+:root[data-npm-stat-style='github'] .ns-results-table tr:first-child td { text-transform: none; font-size: 13px; }

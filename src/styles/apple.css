@@ -1,0 +1,63 @@
+:root[data-npm-stat-style='apple'] {
+  --ns-page: #f2f2f7;
+  --ns-surface: #fff;
+  --ns-surface-subtle: #e9e9ef;
+  --ns-text: #1d1d1f;
+  --ns-muted: #626269;
+  --ns-line: #d2d2d7;
+  --ns-accent: #0071e3;
+  --ns-accent-strong: #005bb5;
+  --ns-on-accent: #fff;
+  --ns-link: #0066cc;
+  --ns-radius: 12px;
+  --ns-control-radius: 9px;
+  --ns-font: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --ns-shadow: none;
+}
+:root[data-npm-stat-style='apple'][data-npm-stat-theme='dark'] {
+  --ns-page: #000;
+  --ns-surface: #1c1c1e;
+  --ns-surface-subtle: #2c2c2e;
+  --ns-text: #f5f5f7;
+  --ns-muted: #aeaeb2;
+  --ns-line: #38383a;
+  --ns-accent: #64b5ff;
+  --ns-accent-strong: #93ccff;
+  --ns-on-accent: #071e35;
+  --ns-link: #64b5ff;
+}
+:root[data-npm-stat-style='apple'] .ns-topbar { background: color-mix(in srgb,var(--ns-page) 80%,transparent); backdrop-filter: blur(20px) saturate(150%); padding: 14px 16px; min-height: 64px; }
+:root[data-npm-stat-style='apple'] .ns-topbar h1 { font-size: 19px; font-weight: 600; letter-spacing: -.025em; }
+:root[data-npm-stat-style='apple'] .ns-main h2 { letter-spacing: -.035em; font-weight: 700; font-size: clamp(26px, 3vw, 34px); }
+:root[data-npm-stat-style='apple'] .ns-main h2 em { font-style: normal; }
+:root[data-npm-stat-style='apple'] .ns-metric { border-color: transparent; }
+:root[data-npm-stat-style='apple'] .ns-date-shortcuts { background: var(--ns-surface-subtle); border-radius: 9px; padding: 3px; gap: 2px; }
+:root[data-npm-stat-style='apple'] .ns-date-shortcuts button { border: 0; background: transparent; }
+:root[data-npm-stat-style='apple'] .ns-date-shortcuts button:hover { background: var(--ns-surface); }
+:root[data-npm-stat-style='apple'] .ns-query-form { padding: 6px 20px; border: 0; gap: 0; }
+:root[data-npm-stat-style='apple'] .ns-query-table { border-spacing: 0; }
+:root[data-npm-stat-style='apple'] .ns-query-table td { padding: 14px 0; border-bottom: 1px solid var(--ns-line); }
+:root[data-npm-stat-style='apple'] .ns-query-table td:first-child { color: var(--ns-text); font-weight: 400; font-size: 15px; }
+:root[data-npm-stat-style='apple'] .ns-query-table tr:last-child td { border-bottom: 0; }
+:root[data-npm-stat-style='apple'] .ns-query-table input:not([type='submit']) { border: 0; background: var(--ns-surface-subtle); border-radius: 8px; min-height: 34px; }
+:root[data-npm-stat-style='apple'] .ns-query-table select { border: 0; color: var(--ns-link); }
+:root[data-npm-stat-style='apple'] .ns-query-table input[type='submit'] { background: transparent; border: 0; color: var(--ns-link); padding: 4px 0; text-align: left; min-height: 32px; font-weight: 500; }
+:root[data-npm-stat-style='apple'] .ns-query-table input[type='submit']:hover { text-decoration: underline; }
+:root[data-npm-stat-style='apple'] .ns-chart { border: 0; padding: 16px; }
+:root[data-npm-stat-style='apple'] .ns-metric { padding: 18px; }
+:root[data-npm-stat-style='apple'] .ns-metric-label { font-size: 11px; font-weight: 500; letter-spacing: .045em; }
+:root[data-npm-stat-style='apple'] .ns-metric strong { font-size: 22px; font-weight: 600; letter-spacing: -.025em; }
+:root[data-npm-stat-style='apple'] .ns-metric:first-child strong { font-size: 14px; letter-spacing: 0; }
+:root[data-npm-stat-style='apple'] .ns-chart-toolbar { gap: 0; }
+:root[data-npm-stat-style='apple'] .ns-chart-toolbar > span { margin-right: 10px; font-weight: 400; }
+:root[data-npm-stat-style='apple'] .ns-chart-toolbar button { margin: 0; border: 3px solid var(--ns-surface-subtle); background: var(--ns-surface-subtle); color: var(--ns-text); font-weight: 500; }
+:root[data-npm-stat-style='apple'] .ns-chart-toolbar button:first-of-type { border-radius: 8px 0 0 8px; }
+:root[data-npm-stat-style='apple'] .ns-chart-toolbar button:last-of-type { border-radius: 0 8px 8px 0; }
+:root[data-npm-stat-style='apple'] .ns-chart-toolbar button.is-active { background: var(--ns-surface); box-shadow: 0 1px 3px rgb(0 0 0 / 12%); }
+:root[data-npm-stat-style='apple'] #ns-style-select,
+:root[data-npm-stat-style='apple'] #ns-theme-toggle { border-color: transparent; background: var(--ns-surface-subtle); }
+@media (max-width: 680px) {
+  :root[data-npm-stat-style='apple'] .ns-query-table tr { margin-bottom: 0; }
+  :root[data-npm-stat-style='apple'] .ns-query-table td:first-child { border-bottom: 0; padding: 12px 0 4px; }
+  :root[data-npm-stat-style='apple'] .ns-query-table td:last-child { padding-bottom: 12px; }
+}
