@@ -4,22 +4,6 @@
 
 [![npm-stat.com](https://img.shields.io/badge/npm--stat.com-CB3837?logo=npm&logoColor=white)](https://npm-stat.com/) 一个将 npm-stat.com 查询和图表页面现代化的 Tampermonkey 用户脚本。
 
-## 📷 风格截图
-
-七种风格的真实页面截图，亮色与暗色并排展示。点击图片可查看原图。
-
-| 风格 | 亮色 | 暗色 |
-| --- | --- | --- |
-| Original npm-stat | [![Original npm-stat 亮色](docs/images/preview/light-original.png)](docs/images/preview/light-original.png) | [![Original npm-stat 暗色](docs/images/preview/dark-original.png)](docs/images/preview/dark-original.png) |
-| npm | [![npm 亮色](docs/images/preview/light-npm.png)](docs/images/preview/light-npm.png) | [![npm 暗色](docs/images/preview/dark-npm.png)](docs/images/preview/dark-npm.png) |
-| Vercel | [![Vercel 亮色](docs/images/preview/light-vercel.png)](docs/images/preview/light-vercel.png) | [![Vercel 暗色](docs/images/preview/dark-vercel.png)](docs/images/preview/dark-vercel.png) |
-| Windows Fluent | [![Windows Fluent 亮色](docs/images/preview/light-fluent.png)](docs/images/preview/light-fluent.png) | [![Windows Fluent 暗色](docs/images/preview/dark-fluent.png)](docs/images/preview/dark-fluent.png) |
-| Google Material 3 | [![Google Material 3 亮色](docs/images/preview/light-material.png)](docs/images/preview/light-material.png) | [![Google Material 3 暗色](docs/images/preview/dark-material.png)](docs/images/preview/dark-material.png) |
-| Apple iOS/macOS | [![Apple iOS/macOS 亮色](docs/images/preview/light-apple.png)](docs/images/preview/light-apple.png) | [![Apple iOS/macOS 暗色](docs/images/preview/dark-apple.png)](docs/images/preview/dark-apple.png) |
-| GitHub | [![GitHub 亮色](docs/images/preview/light-github.png)](docs/images/preview/light-github.png) | [![GitHub 暗色](docs/images/preview/dark-github.png)](docs/images/preview/dark-github.png) |
-
-运行 `npm run docs:screenshots` 可自动构建并重新截图，无需安装 Tampermonkey。真实扩展模式首次需要你安装 Tampermonkey、允许用户脚本、粘贴构建好的 JS 并刷新确认。两个入口、全部参数及逐步操作见[截图工具说明](scripts/docs/readme.md)。
-
 ## 🔨 构建
 
 ```powershell
@@ -126,3 +110,19 @@ https://npm-stat.com/charts.html?package=koishi-plugin-awa-quote-image&package=k
 每项设置依次从有效 URL 值、本地记忆、默认值中解析。打开分享链接不会覆盖已保存的偏好，仅保存你手动修改的设置。`system` 跟随接收者的系统；使用 `light` 或 `dark` 可分享固定外观。提交查询和访问同站图表链接时会携带当前设置。包名、日期、其他参数和 URL 片段会按需保留。缩放、隐藏的图例项及 Linear/Log 不会序列化到链接中。
 
 未安装此用户脚本的用户仍可打开查询；只有 UI 增强功能需要安装脚本。
+
+## 📷 风格截图
+
+七种风格的真实页面截图，亮色与暗色并排展示。点击图片可查看原图。
+
+| 风格 | 亮色 | 暗色 |
+| --- | --- | --- |
+| Original npm-stat | [![Original npm-stat 亮色](docs/images/preview/light-original.png)](docs/images/preview/light-original.png) | [![Original npm-stat 暗色](docs/images/preview/dark-original.png)](docs/images/preview/dark-original.png) |
+| npm | [![npm 亮色](docs/images/preview/light-npm.png)](docs/images/preview/light-npm.png) | [![npm 暗色](docs/images/preview/dark-npm.png)](docs/images/preview/dark-npm.png) |
+| Vercel | [![Vercel 亮色](docs/images/preview/light-vercel.png)](docs/images/preview/light-vercel.png) | [![Vercel 暗色](docs/images/preview/dark-vercel.png)](docs/images/preview/dark-vercel.png) |
+| Windows Fluent | [![Windows Fluent 亮色](docs/images/preview/light-fluent.png)](docs/images/preview/light-fluent.png) | [![Windows Fluent 暗色](docs/images/preview/dark-fluent.png)](docs/images/preview/dark-fluent.png) |
+| Google Material 3 | [![Google Material 3 亮色](docs/images/preview/light-material.png)](docs/images/preview/light-material.png) | [![Google Material 3 暗色](docs/images/preview/dark-material.png)](docs/images/preview/dark-material.png) |
+| Apple iOS/macOS | [![Apple iOS/macOS 亮色](docs/images/preview/light-apple.png)](docs/images/preview/light-apple.png) | [![Apple iOS/macOS 暗色](docs/images/preview/dark-apple.png)](docs/images/preview/dark-apple.png) |
+| GitHub | [![GitHub 亮色](docs/images/preview/light-github.png)](docs/images/preview/light-github.png) | [![GitHub 暗色](docs/images/preview/dark-github.png)](docs/images/preview/dark-github.png) |
+
+运行 `npm run docs:screenshots` 可自动构建并重新截图，无需安装 Tampermonkey。真实扩展模式首次需要你安装 Tampermonkey、允许用户脚本、粘贴构建好的 JS 并刷新确认。两个入口、全部参数及逐步操作见[截图工具说明](scripts/docs/readme.md)。

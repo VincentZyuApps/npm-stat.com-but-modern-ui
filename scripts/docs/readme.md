@@ -118,7 +118,7 @@ npm run docs:setup -- --browser-path /usr/bin/google-chrome --user-data-dir "$HO
 - 正式输出 `docs/images/preview/<light|dark>-<style>.png`（例如 `light-npm.png`、`dark-npm.png`），七个 style 为 original、npm、vercel、fluent、material、apple、github。
 - `manifest.json` 记录版本、浏览器版本、查询 URL、模式、时间和文件列表，便于追溯。
 - 14 张都成功后才复制到正式目录；加载失败、空数据、版本不符或画面未稳定时不会覆盖已有图片。
-- 两个根 README 共用同一组文件，在开头简介之后直接展示全部七种风格的亮暗对照。后续重拍替换同名图片即可，不需要改引用。
+- 两个根 README 共用同一组文件，在功能说明之后的文末展示全部七种风格的亮暗对照。后续重拍替换同名图片即可，不需要改引用。
 - Windows 临时目录位于 `E:\tmp\codex\npm-stat.com-but-modern-ui`；Linux 位于系统临时目录的 `codex/npm-stat.com-but-modern-ui`。只清理本次创建的临时内容，不删除持久档案。
 
 ## ✅ 验证脚本迁移
