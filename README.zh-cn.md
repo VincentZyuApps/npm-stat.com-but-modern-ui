@@ -1,6 +1,7 @@
 # 📊 npm-stat Modern UI
 
-[English](README.md) | [简体中文](README.zh-cn.md)
+> **[📖 English](README.md)**
+> **[📖 简体中文(大陆)](README.zh-cn.md)**
 
 [![npm-stat.com](https://img.shields.io/badge/npm--stat.com-CB3837?logo=npm&logoColor=white)](https://npm-stat.com/) 一个将 npm-stat.com 查询和图表页面现代化的 Tampermonkey 用户脚本。
 

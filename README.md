@@ -1,6 +1,7 @@
 # 📊 npm-stat Modern UI
 
-[English](README.md) | [简体中文](README.zh-cn.md)
+> **[📖 English](README.md)**
+> **[📖 简体中文(大陆)](README.zh-cn.md)**
 
 [![npm-stat.com](https://img.shields.io/badge/npm--stat.com-CB3837?logo=npm&logoColor=white)](https://npm-stat.com/) A Tampermonkey userscript that modernizes the npm-stat.com query and chart pages.
 
