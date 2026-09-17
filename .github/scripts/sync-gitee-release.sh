@@ -69,21 +69,25 @@ existing="$(curl --silent --show-error --write-out '\n%{http_code}' "${api_base}
 status="${existing##*$'\n'}"
 body="${existing%$'\n'*}"
 if [ "${status}" = '200' ]; then
-  release_id="$(jq -r '.id // empty' <<<"${body}")"
-  [ -n "${release_id}" ] || die "Gitee release lookup returned no id."
-  curl --fail-with-body --silent --show-error -X DELETE \
-    "${api_base}/releases/${release_id}?access_token=${GITEE_TOKEN}" >/dev/null
-  deleted=false
-  for attempt in 1 2 3 4 5; do
-    remaining="$(curl --silent --show-error --write-out '\n%{http_code}' "${api_base}/releases/tags/${encoded_tag}?access_token=${GITEE_TOKEN}")"
-    remaining_status="${remaining##*$'\n'}"
-    if [ "${remaining_status}" = '404' ]; then
-      deleted=true
-      break
-    fi
-    sleep 2
-  done
-  [ "${deleted}" = true ] || die "Gitee release ${tag} was not deleted in time."
+  response_type="$(jq -r 'type' <<<"${body}")"
+  if [ "${response_type}" = 'object' ] && jq -e 'has("id")' <<<"${body}" >/dev/null; then
+    release_id="$(jq -r '.id' <<<"${body}")"
+    curl --fail-with-body --silent --show-error -X DELETE \
+      "${api_base}/releases/${release_id}?access_token=${GITEE_TOKEN}" >/dev/null
+    deleted=false
+    for attempt in 1 2 3 4 5; do
+      remaining="$(curl --silent --show-error --write-out '\n%{http_code}' "${api_base}/releases/tags/${encoded_tag}?access_token=${GITEE_TOKEN}")"
+      remaining_status="${remaining##*$'\n'}"
+      if [ "${remaining_status}" = '404' ] || [ "${remaining%$'\n'*}" = 'null' ]; then
+        deleted=true
+        break
+      fi
+      sleep 2
+    done
+    [ "${deleted}" = true ] || die "Gitee release ${tag} was not deleted in time."
+  elif [ "${response_type}" != 'null' ]; then
+    die "Gitee release lookup returned an unexpected ${response_type} response."
+  fi
 elif [ "${status}" != '404' ]; then
   die "Gitee release lookup failed with HTTP ${status}."
 fi
