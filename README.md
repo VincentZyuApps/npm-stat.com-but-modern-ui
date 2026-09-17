@@ -1,5 +1,8 @@
 # 📊 npm-stat Modern UI
 
+<a href="https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui"><img height="25" alt="GitHub Repo" src="https://img.shields.io/badge/GitHub%20Repo-181717?logo=github&logoColor=white&style=flat-square"></a>
+<a href="https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui"><img height="25" alt="Gitee Repo" src="https://img.shields.io/badge/Gitee%20Repo-181717?logo=gitee&logoColor=white&style=flat-square"></a>
+
 > **[📖 English](README.md)**
 > **[📖 简体中文(大陆)](README.zh-cn.md)**
 
