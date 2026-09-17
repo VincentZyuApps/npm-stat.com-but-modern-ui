@@ -59,15 +59,49 @@ In **Settings -> Secrets and variables -> Actions**, create these repository sec
 
 Release modes validate both secrets before creating a GitHub Release. They also check the SSH key against the Gitee repository and confirm the token has push permission. A missing or invalid credential therefore fails safely before any public Release or Pages deployment is created.
 
-Generate an isolated key instead of sharing a personal daily-use key:
+Generate an isolated key instead of sharing a personal daily-use key. This limits the key to this one Gitee mirror: rotating or revoking it later cannot affect daily-use SSH access or other projects. The public key is added to Gitee; only the private key is stored in the GitHub Actions secret.
 
 ```powershell
 New-Item -ItemType Directory -Force "E:\tmp\codex\npm-stat.com-but-modern-ui\release-key"
-ssh-keygen -t ed25519 -C "npm-stat-modern-ui-gitee-mirror" -f "E:\tmp\codex\npm-stat.com-but-modern-ui\release-key\gitee_mirror" -N ""
+ssh-keygen -t ed25519 -C "npm-stat-modern-ui-gitee-mirror" -f "E:\tmp\codex\npm-stat.com-but-modern-ui\release-key\gitee_mirror"
 Get-Content "E:\tmp\codex\npm-stat.com-but-modern-ui\release-key\gitee_mirror.pub"
 ```
 
-Add that public key at `https://gitee.com/profile/sshkeys`. Copy the complete private key into GitHub secret `GITEE_PRIVATE_KEY`, including the `BEGIN` and `END` lines. Create a separate Gitee token at `https://gitee.com/profile/personal_access_tokens`, grant it repository write access, and store it as `GITEE_TOKEN`. Do not put either secret in Git, workflow files, screenshots, or chat.
+When `ssh-keygen` asks for a passphrase and its confirmation, press Enter twice to leave the passphrase empty. PowerShell may omit the empty argument in `-N ""`, so the interactive form above is the reliable Windows command.
+
+Add the displayed public key at `https://gitee.com/profile/sshkeys`. Create a separate Gitee token at `https://gitee.com/profile/personal_access_tokens`, grant it repository write access, and do not put either secret in Git, workflow files, screenshots, or chat.
+
+### Configure repository secrets with GitHub CLI
+
+The following commands create **repository-level** Actions secrets for `VincentZyuApps/npm-stat.com-but-modern-ui`. Values are encrypted locally by `gh` before upload and are not displayed in command output.
+
+If `gh secret set` reports insufficient OAuth scope, run this once and complete its browser/device authorization flow:
+
+```powershell
+gh auth refresh -h github.com -s repo
+```
+
+Set the private key without printing it:
+
+```powershell
+$giteePrivateKey = Get-Content -Raw "E:\tmp\codex\npm-stat.com-but-modern-ui\release-key\gitee_mirror"
+gh secret set GITEE_PRIVATE_KEY --repo VincentZyuApps/npm-stat.com-but-modern-ui --body "$giteePrivateKey"
+Remove-Variable giteePrivateKey
+```
+
+Set the Gitee token through `gh`'s interactive secret prompt. Paste the token when prompted and press Enter; it is not echoed:
+
+```powershell
+gh secret set GITEE_TOKEN --repo VincentZyuApps/npm-stat.com-but-modern-ui
+```
+
+Confirm only the secret names, never their values:
+
+```powershell
+gh secret list --repo VincentZyuApps/npm-stat.com-but-modern-ui
+```
+
+The SSH key authorizes the Gitee Git mirror action. The token authorizes Gitee API calls that create tags, recreate Releases, and upload Release assets; both are required for a complete multi-channel publication.
 
 ## Greasy Fork first publication and updates
 
