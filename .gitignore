@@ -1,4 +1,39 @@
+# 📦 Node.js 依赖目录。
 node_modules/
+
+# 🏗️ 构建生成的可安装用户脚本与临时压缩包。
 dist/
+
+# 🧹 本地调试、截图与一次性临时文件。
 temp/
 tmp/
+
+# 🔐 本地环境变量与凭据文件；保留可提交的示例文件。
+.env
+.env.*
+!.env.example
+
+# 🧪 测试与工具生成的报告、缓存和增量编译信息。
+coverage/
+playwright-report/
+test-results/
+.cache/
+*.tsbuildinfo
+vite.config.ts.timestamp-*
+
+# 🪵 包管理器与运行时日志。
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+*.log
+
+# 🧰 本地编辑器和 IDE 配置。
+.idea/
+.vscode/
+*.suo
+*.swp
+
+# 💻 操作系统生成的文件。
+.DS_Store
+Thumbs.db

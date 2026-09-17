@@ -1,5 +1,11 @@
-# Include Markdown documentation in GitHub language statistics.
+# 📝 将 Markdown 文档纳入 GitHub 语言统计。
 *.md linguist-detectable=true linguist-documentation=false
 
-# GitHub Actions runs release synchronization with Bash on Linux.
+# 🧩 将 GitHub 自动化目录中的文档、工作流与脚本纳入语言统计。
+.github/**/*.md linguist-detectable=true linguist-documentation=false linguist-vendored=false
+.github/**/*.yml linguist-detectable=true linguist-vendored=false
+.github/**/*.yaml linguist-detectable=true linguist-vendored=false
+.github/**/*.sh linguist-detectable=true linguist-vendored=false
+
+# 🐚 GitHub Actions 在 Linux 上通过 Bash 执行发布同步脚本。
 *.sh text eol=lf

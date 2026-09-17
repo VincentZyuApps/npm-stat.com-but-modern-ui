@@ -9,16 +9,16 @@
 Use one of these exact phrases in a commit message:
 
 ```text
-build action
-build release
-build publish
+[build-action]
+[build-release]
+[build-publish]
 ```
 
 | Mode | Build and validation | GitHub Release | Gitee code and Release | GitHub Pages |
 | --- | --- | --- | --- | --- |
-| `build action` | Yes | No | No | No |
-| `build release` | Yes | Yes | Yes | No |
-| `build publish` | Yes | Yes | Yes | Yes |
+| `[build-action]` | Yes | No | No | No |
+| `[build-release]` | Yes | Yes | Yes | No |
+| `[build-publish]` | Yes | Yes | Yes | Yes |
 
 The same modes are available from **Actions -> Build Release Publish -> Run workflow**. The optional `tag` defaults to `v` plus `package.json`'s version. A release is deliberately marked as a GitHub prerelease while the package version contains a prerelease identifier such as `beta.6`.
 
@@ -28,7 +28,7 @@ Example release sequence:
 npm version 0.2.0-beta.6 --no-git-tag-version
 npm run check
 git add -A
-git commit -m "build publish: release v0.2.0-beta.6"
+git commit -m "[build-publish] release v0.2.0-beta.6"
 git push origin main
 ```
 
@@ -40,7 +40,7 @@ npm-stat-modern-ui-dist.tar.gz
 SHA256SUMS.txt
 ```
 
-`build publish` additionally deploys a stable userscript URL to GitHub Pages:
+`[build-publish]` additionally deploys a stable userscript URL to GitHub Pages:
 
 ```text
 https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js
@@ -109,7 +109,7 @@ The SSH key authorizes the Gitee Git mirror action. The token authorizes Gitee A
 
 Greasy Fork is the user-facing discovery channel. Its first script page must be created from your logged-in browser account.
 
-1. Publish a successful `build publish` release so the GitHub Release latest asset exists.
+1. Publish a successful `[build-publish]` release so the GitHub Release latest asset exists.
 2. Open `https://greasyfork.org/zh-CN/scripts/new`, create the script, and upload the built `npm-stat-modern-ui.user.js` once.
 3. Use the organization repository for the homepage and support links, choose MIT as the license, then publish the script page.
 4. Open the script's **Admin** page and configure automatic source synchronization with this GitHub Release latest URL:
@@ -125,7 +125,7 @@ GitHub's `release: published` event tells Greasy Fork to retrieve the latest Rel
 
 ## ✅ Verification and recovery
 
-After `build publish`, verify the build, Release, Pages, Gitee and Greasy Fork in that order:
+After `[build-publish]`, verify the build, Release, Pages, Gitee and Greasy Fork in that order:
 
 1. The GitHub Actions jobs `build`, `publish-release`, `sync-gitee-code`, `sync-gitee-release`, and `publish-pages` have succeeded.
 2. The GitHub Release contains all three assets and the checksums verify with `Get-FileHash`.

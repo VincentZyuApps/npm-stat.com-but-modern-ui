@@ -9,16 +9,16 @@
 在提交信息中使用下列精确短语之一：
 
 ```text
-build action
-build release
-build publish
+[build-action]
+[build-release]
+[build-publish]
 ```
 
 | 模式 | 构建与验证 | GitHub Release | Gitee 代码与 Release | GitHub Pages |
 | --- | --- | --- | --- | --- |
-| `build action` | 是 | 否 | 否 | 否 |
-| `build release` | 是 | 是 | 是 | 否 |
-| `build publish` | 是 | 是 | 是 | 是 |
+| `[build-action]` | 是 | 否 | 否 | 否 |
+| `[build-release]` | 是 | 是 | 是 | 否 |
+| `[build-publish]` | 是 | 是 | 是 | 是 |
 
 也可以通过 **Actions -> Build Release Publish -> Run workflow** 手动选择同样的模式。可选的 `tag` 默认为 `v` 加上 `package.json` 中的版本号。版本包含 `beta.6` 之类预发布标识时，Release 会被标记为 GitHub prerelease。
 
@@ -28,7 +28,7 @@ build publish
 npm version 0.2.0-beta.6 --no-git-tag-version
 npm run check
 git add -A
-git commit -m "build publish: release v0.2.0-beta.6"
+git commit -m "[build-publish] release v0.2.0-beta.6"
 git push origin main
 ```
 
@@ -40,7 +40,7 @@ npm-stat-modern-ui-dist.tar.gz
 SHA256SUMS.txt
 ```
 
-`build publish` 还会将稳定的用户脚本地址部署到 GitHub Pages：
+`[build-publish]` 还会将稳定的用户脚本地址部署到 GitHub Pages：
 
 ```text
 https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js
@@ -109,7 +109,7 @@ SSH key 用于授权 Gitee Git 镜像 action。Token 用于授权 Gitee API 创�
 
 Greasy Fork 是面向用户的发现渠道。首次创建脚本页必须由你在已登录的浏览器账号中完成。
 
-1. 先成功执行一次 `build publish`，使 GitHub Release 的 latest 附件存在。
+1. 先成功执行一次 `[build-publish]`，使 GitHub Release 的 latest 附件存在。
 2. 打开 `https://greasyfork.org/zh-CN/scripts/new`，创建脚本，并首次上传构建出的 `npm-stat-modern-ui.user.js`。
 3. 主页和支持链接使用组织仓库，许可证选择 MIT，然后发布脚本页。
 4. 打开脚本的 **Admin** 页面，并将自动源代码同步配置为此 GitHub Release latest URL：
@@ -125,7 +125,7 @@ GitHub 的 `release: published` 事件会通知 Greasy Fork 获取 latest Releas
 
 ## ✅ 验证与恢复
 
-执行 `build publish` 后，按以下顺序验证构建、Release、Pages、Gitee 与 Greasy Fork：
+执行 `[build-publish]` 后，按以下顺序验证构建、Release、Pages、Gitee 与 Greasy Fork：
 
 1. GitHub Actions 中的 `build`、`publish-release`、`sync-gitee-code`、`sync-gitee-release` 和 `publish-pages` 均成功。
 2. GitHub Release 包含全部三个附件，并可用 `Get-FileHash` 验证校验和。

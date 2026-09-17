@@ -57,17 +57,17 @@ jobs:
           else
             message="$(git log -1 --pretty=%B)"
             case "${message,,}" in
-              *'build publish'*) mode=publish ;;
-              *'build release'*) mode=release ;;
-              *'build action'*) mode=action ;;
-              *) mode=none ;;
+              *'[build-publish]'*) mode=publish; trigger='[build-publish]' ;;
+              *'[build-release]'*) mode=release; trigger='[build-release]' ;;
+              *'[build-action]'*) mode=action; trigger='[build-action]' ;;
+              *) mode=none; trigger=none ;;
             esac
             if [ "${mode}" = none ]; then
               echo 'should_run=false' >> "${GITHUB_OUTPUT}"
               echo 'trigger=none' >> "${GITHUB_OUTPUT}"
             else
               echo 'should_run=true' >> "${GITHUB_OUTPUT}"
-              echo "trigger=commit:${mode}" >> "${GITHUB_OUTPUT}"
+              echo "trigger=commit:${trigger}" >> "${GITHUB_OUTPUT}"
             fi
             echo "mode=${mode}" >> "${GITHUB_OUTPUT}"
           fi
