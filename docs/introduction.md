@@ -1,6 +1,49 @@
+> ## 📖 Read the full GitHub README for the complete experience
+>
+> This page is a compact Greasy Fork introduction. The full README includes installation details, light and dark screenshots for all seven styles, five real test links, sharing parameters, and development notes.
+>
+> **[Open the full GitHub README](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui#readme)** | [Gitee README](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui#readme)
+
+> Start with this npm-stat.com comparison page: [react, vue, svelte, preact, and Angular](https://npm-stat.com/charts.html?package=react&package=vue&package=svelte&package=preact&package=%40angular%2Fcore&from=2015-01-01&to=2026-09-15).
+
+# 📊 npm-stat Modern UI
+
+A Tampermonkey userscript that gives npm-stat.com's query and download-chart pages a modern interface.
+
+[![GitHub](https://img.shields.io/badge/GitHub-repository-181717?logo=github&logoColor=white)](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui)
+
+[![GitHub Pages](https://img.shields.io/badge/npm--stat.com-install-CB3837?logo=npm&logoColor=white)](https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js)
+
+[![Gitee](https://img.shields.io/badge/Gitee-mirror-C71D23?logo=gitee&logoColor=white)](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui)
+
+[![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-install-670000?logo=googlechrome&logoColor=white)](https://greasyfork.org/zh-CN/scripts/596128-npm-stat-modern-ui)
+
+![npm style light preview](https://raw.githubusercontent.com/VincentZyuApps/npm-stat.com-but-modern-ui/main/docs/images/preview/light-npm.png)
+
+## ✨ Highlights
+
+- Choose from original npm-stat, npm, Vercel, Windows Fluent, Google Material 3, Apple iOS/macOS, and GitHub styles.
+- Choose system, light, or dark theme mode; the script remembers your preference.
+- Use new ECharts charts while retaining legends, zooming, hover details, and linear/logarithmic axis controls.
+- Aggregate both daily and weekly charts by 1, 2, 3, 4, 5, 10, 25, or 50 intervals, with mean or total statistics.
+- Share styles, themes, grouping sizes, and statistic modes through `ui_*` URL parameters; links still work without the script.
+
+## 🚀 Usage
+
+1. Install Tampermonkey or a compatible userscript manager, then select the npm-stat.com install badge above.
+2. Open an npm-stat.com query or chart page; the script enhances only the page interface and interactions, not the package-download data source.
+3. Select a visual style in the upper-right menu, then use the adjacent emoji button for system, light, or dark mode.
+4. Adjust grouping and mean/total controls in the daily and weekly chart toolbars; preferences persist in the browser and shareable URLs.
+
+## 📝 Feedback and support
+
+Report bugs, compatibility problems, or UI suggestions through [GitHub Issues](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/issues). Include the npm-stat.com page URL, browser and userscript-manager versions, and a screenshot when useful.
+
+-----
+
 > ## 📖 建议前往 GitHub README 获得完整体验
 >
-> 此页仅提供 Greasy Fork 的快速介绍。完整 README 包含安装方式、七种风格的亮暗截图、五组真实测试链接、分享参数与开发说明，阅读体验更完整。
+> 此页仅提供 Greasy Fork 的简版介绍。完整 README 包含安装方式、七种风格的亮暗截图、五组真实测试链接、分享参数与开发说明，阅读体验更完整。
 >
 > **[点击打开完整 GitHub README](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui#readme)** ｜ [Gitee README](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui#readme)
 
@@ -15,6 +58,8 @@
 [![GitHub Pages](https://img.shields.io/badge/npm--stat.com-install-CB3837?logo=npm&logoColor=white)](https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js)
 
 [![Gitee](https://img.shields.io/badge/Gitee-mirror-C71D23?logo=gitee&logoColor=white)](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui)
+
+[![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-install-670000?logo=googlechrome&logoColor=white)](https://greasyfork.org/zh-CN/scripts/596128-npm-stat-modern-ui)
 
 ![npm 风格亮色预览](https://raw.githubusercontent.com/VincentZyuApps/npm-stat.com-but-modern-ui/main/docs/images/preview/light-npm.png)
 

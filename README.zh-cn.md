@@ -8,6 +8,7 @@
 <a href="https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases"><img height="25" alt="浏览 GitHub Release" src="https://img.shields.io/badge/GitHub%20Release-browse-181717?logo=github&logoColor=white&style=flat-square"></a>
 <a href="https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js"><img height="25" alt="从 GitHub Pages 安装" src="https://img.shields.io/badge/npm--stat.com-auto--update-CB3837?logo=npm&logoColor=white&style=flat-square"></a>
 <a href="https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui/releases"><img height="25" alt="浏览 Gitee Release" src="https://img.shields.io/badge/Gitee%20Release-mirror-C71D23?logo=gitee&logoColor=white&style=flat-square"></a>
+<a href="https://greasyfork.org/zh-CN/scripts/596128-npm-stat-modern-ui"><img height="25" alt="从 Greasy Fork 安装" src="https://img.shields.io/badge/Greasy%20Fork-install-670000?logo=googlechrome&logoColor=white&style=flat-square"></a>
 
 ## 🔨 构建
 
