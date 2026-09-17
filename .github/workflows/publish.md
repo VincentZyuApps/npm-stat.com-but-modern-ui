@@ -20,15 +20,15 @@ Use one of these exact phrases in a commit message:
 | `[build-release]` | Yes | Yes | Yes | No |
 | `[build-publish]` | Yes | Yes | Yes | Yes |
 
-The same modes are available from **Actions -> Build Release Publish -> Run workflow**. The optional `tag` defaults to `v` plus `package.json`'s version. A release is deliberately marked as a GitHub prerelease while the package version contains a prerelease identifier such as `beta.6`.
+The same modes are available from **Actions -> Build Release Publish -> Run workflow**. The optional `tag` defaults to `v` plus `package.json`'s version. Every published alpha, beta, rc, and stable version is marked as GitHub latest so the fixed Greasy Fork source URL always resolves.
 
 Example release sequence:
 
 ```powershell
-npm version 0.2.0-beta.7+20260917 --no-git-tag-version
+npm version 0.2.0-rc.2+20260917 --no-git-tag-version
 npm run check
 git add -A
-git commit -m "[build-publish] release v0.2.0-beta.7+20260917"
+git commit -m "[build-publish] release v0.2.0-rc.2+20260917"
 git push origin main
 ```
 
@@ -111,7 +111,7 @@ Greasy Fork is the user-facing discovery channel. Its first script page must be 
 
 ### 📝 Create the first script page
 
-1. Run `[build-publish]` successfully, then verify that GitHub Pages serves the current userscript.
+1. Run `[build-publish]` successfully, then verify that the GitHub Release contains the current userscript asset.
 2. Sign in to the intended Greasy Fork account; this account becomes the first script author.
 3. Open `https://greasyfork.org/zh-CN/script_versions/new`; do not use `/scripts/new`, which is not a valid route.
 4. Upload the local `dist/npm-stat-modern-ui.user.js`, or paste its complete built content into the source-code field.
@@ -131,23 +131,23 @@ License:  MIT
 
 ### 🔄 Configure automatic source synchronization
 
-11. Open the published script's **Admin** page and configure automatic source synchronization with this GitHub Pages URL:
+11. Open the published script's **Admin** page and configure automatic source synchronization with this GitHub Release URL:
 
 ```text
-https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js
+https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases/latest/download/npm-stat-modern-ui.user.js
 ```
 
-12. Save the source setting. If the Admin page offers a manual synchronization action, run it and check that the displayed `@version` matches the Pages file.
+12. Save the source setting. If the Admin page offers a manual synchronization action, run it and check that the displayed `@version` matches the Release asset.
 
 ### 📣 Configure the GitHub Release webhook
 
 13. Open `https://greasyfork.org/zh-CN/users/webhook-info` while signed in and generate a webhook configuration.
-14. Keep the displayed Payload URL and secret private; copy them directly into GitHub without putting either value in Git, an issue, or chat.
+14. Keep the displayed Payload URL and secret private; copy them into GitHub's **Webhook Secret** field, never into an Actions Secret, Git, an issue, or chat.
 15. Open `https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/settings/hooks`, select **Add webhook**, and paste Greasy Fork's Payload URL and secret.
-16. Set Content type to `application/json`, choose **Let me select individual events**, enable only **Releases**, and leave the webhook active.
+16. Set Content type to `application/json`, choose **Let me select individual events**, enable only **Releases**, and leave the webhook active; regenerating this account-level secret requires updating every existing Greasy Fork GitHub webhook.
 17. After GitHub accepts the webhook, return only the public Greasy Fork script page URL to the maintainer; do not share the webhook secret.
 
-GitHub's `release: published` event tells Greasy Fork to retrieve the deployed Pages userscript. The webhook does not replay the already-published initial Release, so the first script version is uploaded manually; each later public update needs a new `package.json` version and a new `[build-publish]` Release.
+GitHub's `release: published` event tells Greasy Fork to retrieve the uploaded Release userscript. The webhook does not replay the already-published initial Release, so the first script version is uploaded manually; each later public update needs a new `package.json` version and a new `[build-publish]` Release.
 
 ## ✅ Verification and recovery
 

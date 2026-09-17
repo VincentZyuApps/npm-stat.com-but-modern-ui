@@ -204,9 +204,6 @@ jobs:
         run: |
           set -euo pipefail
           release_kind=(--latest)
-          if [[ "${VERSION}" == *-* ]]; then
-            release_kind=(--prerelease)
-          fi
           if gh release view "${RELEASE_TAG}" >/dev/null 2>&1; then
             gh release upload "${RELEASE_TAG}" release/* --clobber
             gh release edit "${RELEASE_TAG}" --title "${RELEASE_TAG}" --notes-file release-notes.md "${release_kind[@]}"
