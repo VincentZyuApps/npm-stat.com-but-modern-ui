@@ -32,6 +32,7 @@ dist/npm-stat-modern-ui.user.js
 | 渠道 | 安装或下载 |
 | --- | --- |
 | GitHub Pages | [安装最新用户脚本](https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js) |
+| Greasy Fork | [从 Greasy Fork 安装](https://greasyfork.org/zh-CN/scripts/596128-npm-stat-modern-ui) |
 | GitHub Release | [浏览带版本的下载](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases) |
 | Gitee Release | [浏览中国镜像](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui/releases) |
 

@@ -32,6 +32,7 @@ Install Tampermonkey or a compatible userscript manager, then use one of these l
 | Channel | Install or download |
 | --- | --- |
 | GitHub Pages | [Install the latest userscript](https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js) |
+| Greasy Fork | [Install from Greasy Fork](https://greasyfork.org/zh-CN/scripts/596128-npm-stat-modern-ui) |
 | GitHub Release | [Browse versioned downloads](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases) |
 | Gitee Release | [Browse the China mirror](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui/releases) |
 
