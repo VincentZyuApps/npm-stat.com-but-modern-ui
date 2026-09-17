@@ -25,10 +25,10 @@
 发版示例：
 
 ```powershell
-npm version 0.2.0-beta.6 --no-git-tag-version
+npm version 0.2.0-beta.7+20260917 --no-git-tag-version
 npm run check
 git add -A
-git commit -m "[build-publish] release v0.2.0-beta.6"
+git commit -m "[build-publish] release v0.2.0-beta.7+20260917"
 git push origin main
 ```
 

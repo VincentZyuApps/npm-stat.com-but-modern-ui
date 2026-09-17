@@ -285,7 +285,7 @@ function installAggregationControl(figure: HTMLElement): void {
       button.setAttribute('aria-pressed', String(active));
     });
     const modeButton = toolbar.querySelector<HTMLButtonElement>('button[data-mode]')!;
-    modeButton.textContent = `${preferences[modeKey] === 'mean' ? '均值' : '总量'} ⇄`;
+    modeButton.textContent = `🧮 ${preferences[modeKey] === 'mean' ? '均值' : '总量'} ⇄`;
     modeButton.setAttribute('aria-label', `当前${preferences[modeKey] === 'mean' ? '均值，切换为总量' : '总量，切换为均值'}`);
   };
   for (const size of sizes) {

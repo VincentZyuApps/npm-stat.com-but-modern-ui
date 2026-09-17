@@ -127,6 +127,7 @@ function addDateShortcuts(form: HTMLFormElement): void {
 
   const submit = form.querySelector<HTMLInputElement>('input[type="submit"]');
   if (submit) {
+    if (submit.value.trim().toLowerCase() === 'show charts') submit.value = '📊 Show charts';
     const cell = submit.closest('td');
     if (cell) {
       cell.colSpan = 2;
