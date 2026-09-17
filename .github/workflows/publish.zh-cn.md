@@ -109,19 +109,19 @@ SSH key 用于授权 Gitee Git 镜像 action。Token 用于授权 Gitee API 创�
 
 Greasy Fork 是面向用户的发现渠道。首次创建脚本页必须由你在已登录的浏览器账号中完成。
 
-1. 先成功执行一次 `[build-publish]`，使 GitHub Release 的 latest 附件存在。
-2. 打开 `https://greasyfork.org/zh-CN/scripts/new`，创建脚本，并首次上传构建出的 `npm-stat-modern-ui.user.js`。
+1. 先成功执行一次 `[build-publish]`，使 GitHub Pages 部署当前用户脚本。
+2. 打开 `https://greasyfork.org/zh-CN/script_versions/new`，然后首次上传构建出的 `npm-stat-modern-ui.user.js`。
 3. 主页和支持链接使用组织仓库，许可证选择 MIT，然后发布脚本页。
-4. 打开脚本的 **Admin** 页面，并将自动源代码同步配置为此 GitHub Release latest URL：
+4. 打开脚本的 **Admin** 页面，并将自动源代码同步配置为此 GitHub Pages URL：
 
 ```text
-https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases/latest/download/npm-stat-modern-ui.user.js
+https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js
 ```
 
 5. 打开 `https://greasyfork.org/zh-CN/users/webhook-info`，生成 webhook secret，并将页面显示的 Payload URL 和 secret 填到 GitHub **Settings -> Webhooks -> Add webhook**。Content type 选择 `application/json`，仅启用 **Releases**，并保持 webhook active。
 6. 将最终 Greasy Fork 脚本页 URL 发给维护者。只有页面已上线后，才把它写进 README 和 userscript metadata。
 
-GitHub 的 `release: published` 事件会通知 Greasy Fork 获取 latest Release 附件。编辑已存在的 Release 不会创建新的 Greasy Fork 脚本版本：每次公开更新都必须递增 `package.json` 版本。
+GitHub 的 `release: published` 事件会通知 Greasy Fork 获取已部署的 Pages 用户脚本。编辑已存在的 Release 不会创建新的 Greasy Fork 脚本版本：每次公开更新都必须递增 `package.json` 版本。
 
 ## ✅ 验证与恢复
 

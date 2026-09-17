@@ -155,8 +155,11 @@ jobs:
             | jq -e '.permission.push == true' >/dev/null
 
   publish-release:
-    needs: [select-mode, build, validate-gitee-secrets]
-    if: needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish'
+    needs: [select-mode, build, validate-gitee-secrets, publish-pages]
+    if: >-
+      always() &&
+      (needs.select-mode.outputs.mode == 'release' ||
+      (needs.select-mode.outputs.mode == 'publish' && needs.publish-pages.result == 'success'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5

@@ -109,19 +109,19 @@ The SSH key authorizes the Gitee Git mirror action. The token authorizes Gitee A
 
 Greasy Fork is the user-facing discovery channel. Its first script page must be created from your logged-in browser account.
 
-1. Publish a successful `[build-publish]` release so the GitHub Release latest asset exists.
-2. Open `https://greasyfork.org/zh-CN/scripts/new`, create the script, and upload the built `npm-stat-modern-ui.user.js` once.
+1. Run `[build-publish]` successfully so GitHub Pages has deployed the current userscript.
+2. Open `https://greasyfork.org/zh-CN/script_versions/new`, then upload the built `npm-stat-modern-ui.user.js` once.
 3. Use the organization repository for the homepage and support links, choose MIT as the license, then publish the script page.
-4. Open the script's **Admin** page and configure automatic source synchronization with this GitHub Release latest URL:
+4. Open the script's **Admin** page and configure automatic source synchronization with this GitHub Pages URL:
 
 ```text
-https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases/latest/download/npm-stat-modern-ui.user.js
+https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js
 ```
 
 5. Open `https://greasyfork.org/zh-CN/users/webhook-info`, generate a webhook secret, and use its displayed Payload URL and secret in GitHub **Settings -> Webhooks -> Add webhook**. Select `application/json`, enable only **Releases**, and keep the webhook active.
 6. Send the final Greasy Fork script page URL back to the maintainer. Add it to the README and userscript metadata only after it is live.
 
-GitHub's `release: published` event tells Greasy Fork to retrieve the latest Release asset. Editing an existing release does not create a new Greasy Fork script version: increment `package.json`'s version for every public update.
+GitHub's `release: published` event tells Greasy Fork to retrieve the deployed Pages userscript. Editing an existing release does not create a new Greasy Fork script version: increment `package.json`'s version for every public update.
 
 ## ✅ Verification and recovery
 
