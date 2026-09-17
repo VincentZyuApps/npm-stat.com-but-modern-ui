@@ -137,7 +137,7 @@ License:  MIT
 https://raw.githubusercontent.com/VincentZyuApps/npm-stat.com-but-modern-ui/greasyfork/npm-stat-modern-ui.user.js
 ```
 
-12. 保存源码设置。发版工作流会在每次发布 Release 前更新这个仅含脚本的 `greasyfork` 分支；执行一次手动同步并确认 `@version`。
+12. 保存源码设置。发版工作流会在每次发布 Release 前向仅含脚本的 `greasyfork` 分支追加构建提交；执行一次手动同步并确认 `@version`。
 
 ### 📣 配置 GitHub push Webhook
 
