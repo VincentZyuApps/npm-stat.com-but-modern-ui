@@ -1,10 +1,10 @@
-# GitHub Actions 发版、Gitee 镜像、GitHub Pages 与 Greasy Fork
+# 🚀 GitHub Actions 发版、Gitee 镜像、GitHub Pages 与 Greasy Fork
 
 > [English](publish.md)
 
 `publish.yml` 是 npm-stat Modern UI 的发版工作流。它只会在推送包含匹配关键字的提交，或手动启动时运行；普通文档和开发提交不会构建或发布 Release。
 
-## 工作流模式
+## 🧭 工作流模式
 
 在提交信息中使用下列精确短语之一：
 
@@ -48,7 +48,7 @@ https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.u
 
 首次需要在仓库 **Settings -> Pages** 中启用 GitHub Pages，来源选择 **GitHub Actions**，并在分发此地址前保持仓库公开。
 
-## Gitee 镜像与 Release 配置
+## 🪞 Gitee 镜像与 Release 配置
 
 工作流使用 `Yikun/hub-mirror-action` 将组织仓库镜像到 `vincent-zyu/npm-stat.com-but-modern-ui`，然后由 `.github/scripts/sync-gitee-release.sh` 重新创建 Gitee Release，并上传同样的三个附件。
 
@@ -73,7 +73,7 @@ Get-Content "E:\tmp\codex\npm-stat.com-but-modern-ui\release-key\gitee_mirror.pu
 
 在 `https://gitee.com/profile/sshkeys` 添加显示出的公钥。随后到 `https://gitee.com/profile/personal_access_tokens` 创建独立的 Gitee Token，授予仓库写权限。不要将私钥或 Token 写进 Git、工作流文件、截图或聊天记录。
 
-### 使用 GitHub CLI 配置 Repository Secret
+### 🔐 使用 GitHub CLI 配置 Repository Secret
 
 以下命令会为 `VincentZyuApps/npm-stat.com-but-modern-ui` 创建 **repository-level** Actions Secret。`gh` 会在本地加密 Secret 值再上传，命令输出不会显示值。
 
@@ -97,15 +97,15 @@ Remove-Variable giteePrivateKey
 gh secret set GITEE_TOKEN --repo VincentZyuApps/npm-stat.com-but-modern-ui
 ```
 
-只确认 Secret 名称，绝不确认或输出其值：
+上传后可列出已配置的 Actions Secret 名称；GitHub 不会返回其值：
 
 ```powershell
-gh secret list --repo VincentZyuApps/npm-stat.com-but-modern-ui
+gh secret list --app actions --repo VincentZyuApps/npm-stat.com-but-modern-ui
 ```
 
 SSH key 用于授权 Gitee Git 镜像 action。Token 用于授权 Gitee API 创建 tag、重新创建 Release 和上传 Release 附件；完整的多渠道发版需要两者。
 
-## Greasy Fork 首次发布与更新
+## 🧩 Greasy Fork 首次发布与更新
 
 Greasy Fork 是面向用户的发现渠道。首次创建脚本页必须由你在已登录的浏览器账号中完成。
 
@@ -123,7 +123,7 @@ https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases/latest/dow
 
 GitHub 的 `release: published` 事件会通知 Greasy Fork 获取 latest Release 附件。编辑已存在的 Release 不会创建新的 Greasy Fork 脚本版本：每次公开更新都必须递增 `package.json` 版本。
 
-## 验证与恢复
+## ✅ 验证与恢复
 
 执行 `build publish` 后，按以下顺序验证构建、Release、Pages、Gitee 与 Greasy Fork：
 

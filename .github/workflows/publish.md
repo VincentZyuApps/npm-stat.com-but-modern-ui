@@ -1,10 +1,10 @@
-# GitHub Actions Release, Gitee Mirror, GitHub Pages, and Greasy Fork
+# 🚀 GitHub Actions Release, Gitee Mirror, GitHub Pages, and Greasy Fork
 
 > [简体中文](publish.zh-cn.md)
 
 `publish.yml` is the release workflow for npm-stat Modern UI. It deliberately runs only when a matching commit message is pushed or when it is started manually, so ordinary documentation and development pushes do not build or publish releases.
 
-## Workflow modes
+## 🧭 Workflow modes
 
 Use one of these exact phrases in a commit message:
 
@@ -48,7 +48,7 @@ https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.u
 
 Enable GitHub Pages once in the repository's **Settings -> Pages**, choose **GitHub Actions** as the source, and keep the repository public before distributing this URL.
 
-## Gitee mirror and Release configuration
+## 🪞 Gitee mirror and Release configuration
 
 The workflow uses `Yikun/hub-mirror-action` to mirror the organization repository to `vincent-zyu/npm-stat.com-but-modern-ui`, then `.github/scripts/sync-gitee-release.sh` recreates the GitHub Release and uploads the same three assets to Gitee.
 
@@ -73,7 +73,7 @@ When `ssh-keygen` asks for a passphrase and its confirmation, press Enter twice 
 
 Add the displayed public key at `https://gitee.com/profile/sshkeys`. Create a separate Gitee token at `https://gitee.com/profile/personal_access_tokens`, grant it repository write access, and do not put either secret in Git, workflow files, screenshots, or chat.
 
-### Configure repository secrets with GitHub CLI
+### 🔐 Configure repository secrets with GitHub CLI
 
 The following commands create **repository-level** Actions secrets for `VincentZyuApps/npm-stat.com-but-modern-ui`. Values are encrypted locally by `gh` before upload and are not displayed in command output.
 
@@ -97,15 +97,15 @@ Set the Gitee token through `gh`'s interactive secret prompt. Paste the token wh
 gh secret set GITEE_TOKEN --repo VincentZyuApps/npm-stat.com-but-modern-ui
 ```
 
-Confirm only the secret names, never their values:
+List configured Actions secret names after upload; GitHub never returns their values:
 
 ```powershell
-gh secret list --repo VincentZyuApps/npm-stat.com-but-modern-ui
+gh secret list --app actions --repo VincentZyuApps/npm-stat.com-but-modern-ui
 ```
 
 The SSH key authorizes the Gitee Git mirror action. The token authorizes Gitee API calls that create tags, recreate Releases, and upload Release assets; both are required for a complete multi-channel publication.
 
-## Greasy Fork first publication and updates
+## 🧩 Greasy Fork first publication and updates
 
 Greasy Fork is the user-facing discovery channel. Its first script page must be created from your logged-in browser account.
 
@@ -123,7 +123,7 @@ https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases/latest/dow
 
 GitHub's `release: published` event tells Greasy Fork to retrieve the latest Release asset. Editing an existing release does not create a new Greasy Fork script version: increment `package.json`'s version for every public update.
 
-## Verification and recovery
+## ✅ Verification and recovery
 
 After `build publish`, verify the build, Release, Pages, Gitee and Greasy Fork in that order:
 
