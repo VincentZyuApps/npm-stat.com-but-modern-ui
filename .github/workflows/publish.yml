@@ -176,12 +176,12 @@ jobs:
           COMMITS: ${{ needs.select-mode.outputs.commits }}
         run: |
           cat > build-info.md <<EOF
-          - Repository: \`${REPO}\`
-          - Version: \`${VERSION}\`
-          - Release tag: \`${RELEASE_TAG}\`
-          - Commit: \`${GITHUB_SHA}\`
-          - Trigger: \`${TRIGGER}\`
-          - Workflow: https://github.com/${REPO}/actions/runs/${GITHUB_RUN_ID}
+          - Repository / 仓库: \`${REPO}\`
+          - Version / 版本: \`${VERSION}\`
+          - Release tag / 发布标签: \`${RELEASE_TAG}\`
+          - Commit / 提交: \`${GITHUB_SHA}\`
+          - Trigger / 触发方式: \`${TRIGGER}\`
+          - Workflow / 工作流: https://github.com/${REPO}/actions/runs/${GITHUB_RUN_ID}
           EOF
           node --input-type=module <<'NODE'
           import { readFile, writeFile } from 'node:fs/promises';

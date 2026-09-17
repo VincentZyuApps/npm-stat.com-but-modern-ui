@@ -8,11 +8,6 @@
 
 [![npm-stat.com](https://img.shields.io/badge/npm--stat.com-CB3837?logo=npm&logoColor=white)](https://npm-stat.com/) A Tampermonkey userscript that modernizes the npm-stat.com query and chart pages.
 
-<a href="https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases"><img height="25" alt="Browse GitHub Releases" src="https://img.shields.io/badge/GitHub%20Release-browse-181717?logo=github&logoColor=white&style=flat-square"></a>
-<a href="https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js"><img height="25" alt="Install from GitHub Pages" src="https://img.shields.io/badge/npm--stat.com-auto--update-CB3837?logo=npm&logoColor=white&style=flat-square"></a>
-<a href="https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui/releases"><img height="25" alt="Browse Gitee Releases" src="https://img.shields.io/badge/Gitee%20Release-mirror-C71D23?logo=gitee&logoColor=white&style=flat-square"></a>
-<a href="https://greasyfork.org/zh-CN/scripts/596128-npm-stat-modern-ui"><img height="25" alt="Install from Greasy Fork" src="https://img.shields.io/badge/Greasy%20Fork-install-670000?logo=googlechrome&logoColor=white&style=flat-square"></a>
-
 ## 🔨 Build
 
 ```powershell
@@ -34,10 +29,10 @@ Install Tampermonkey or a compatible userscript manager, then use one of these l
 
 | Channel | Install or download |
 | --- | --- |
-| GitHub Pages | [Install the latest userscript](https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js) |
-| Greasy Fork | [Install from Greasy Fork](https://greasyfork.org/zh-CN/scripts/596128-npm-stat-modern-ui) |
-| GitHub Release | [Browse versioned downloads](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases) |
-| Gitee Release | [Browse the China mirror](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui/releases) |
+| [![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-181717?logo=github&logoColor=white&style=flat-square)](https://vincentzyuapps.github.io/npm-stat-modern-ui/npm-stat-modern-ui.user.js) | [Install the latest userscript](https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js) |
+| [![Greasy Fork](https://img.shields.io/badge/Greasy%20Fork-670000?logo=googlechrome&logoColor=white&style=flat-square)](https://greasyfork.org/zh-CN/scripts/596128-npm-stat-modern-ui) | [Install from Greasy Fork](https://greasyfork.org/zh-CN/scripts/596128-npm-stat-modern-ui) |
+| [![GitHub Release](https://img.shields.io/badge/GitHub%20Release-181717?logo=github&logoColor=white&style=flat-square)](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases) | [Browse versioned downloads](https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases) |
+| [![Gitee Release](https://img.shields.io/badge/Gitee%20Release-C71D23?logo=gitee&logoColor=white&style=flat-square)](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui/releases) | [Browse the China mirror](https://gitee.com/vincent-zyu/npm-stat.com-but-modern-ui/releases) |
 
 After the manager opens its installation page, select **Install** and refresh npm-stat.com. The userscript checks the Pages URL for updates; leave the manager's automatic-update setting enabled.
 
