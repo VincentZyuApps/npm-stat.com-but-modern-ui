@@ -109,19 +109,45 @@ The SSH key authorizes the Gitee Git mirror action. The token authorizes Gitee A
 
 Greasy Fork is the user-facing discovery channel. Its first script page must be created from your logged-in browser account.
 
-1. Run `[build-publish]` successfully so GitHub Pages has deployed the current userscript.
-2. Open `https://greasyfork.org/zh-CN/script_versions/new`, then upload the built `npm-stat-modern-ui.user.js` once.
-3. Use the organization repository for the homepage and support links, choose MIT as the license, then publish the script page.
-4. Open the script's **Admin** page and configure automatic source synchronization with this GitHub Pages URL:
+### 📝 Create the first script page
+
+1. Run `[build-publish]` successfully, then verify that GitHub Pages serves the current userscript.
+2. Sign in to the intended Greasy Fork account; this account becomes the first script author.
+3. Open `https://greasyfork.org/zh-CN/script_versions/new`; do not use `/scripts/new`, which is not a valid route.
+4. Upload the local `dist/npm-stat-modern-ui.user.js`, or paste its complete built content into the source-code field.
+5. Keep the generated userscript metadata intact, especially `@name`, `@namespace`, `@version`, `@match`, `@run-at`, and `@license`.
+6. Paste the current contents of `docs/introduction.md` into Greasy Fork's Additional info field for the initial script version.
+7. Use the organization repository as the Homepage URL and its Issues page as the Support URL:
+
+```text
+Homepage: https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui
+Support:  https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/issues
+License:  MIT
+```
+
+8. When Greasy Fork asks for a language or audience, select the option covering all languages, because the script applies to npm-stat.com globally.
+9. Submit and publish the initial version, then open its public page and use the install button once to confirm Greasy Fork serves the expected version.
+10. Save the public script page URL; it is safe to share and is needed for the repository badges and metadata.
+
+### 🔄 Configure automatic source synchronization
+
+11. Open the published script's **Admin** page and configure automatic source synchronization with this GitHub Pages URL:
 
 ```text
 https://vincentzyuapps.github.io/npm-stat.com-but-modern-ui/npm-stat-modern-ui.user.js
 ```
 
-5. Open `https://greasyfork.org/zh-CN/users/webhook-info`, generate a webhook secret, and use its displayed Payload URL and secret in GitHub **Settings -> Webhooks -> Add webhook**. Select `application/json`, enable only **Releases**, and keep the webhook active.
-6. Send the final Greasy Fork script page URL back to the maintainer. Add it to the README and userscript metadata only after it is live.
+12. Save the source setting. If the Admin page offers a manual synchronization action, run it and check that the displayed `@version` matches the Pages file.
 
-GitHub's `release: published` event tells Greasy Fork to retrieve the deployed Pages userscript. Editing an existing release does not create a new Greasy Fork script version: increment `package.json`'s version for every public update.
+### 📣 Configure the GitHub Release webhook
+
+13. Open `https://greasyfork.org/zh-CN/users/webhook-info` while signed in and generate a webhook configuration.
+14. Keep the displayed Payload URL and secret private; copy them directly into GitHub without putting either value in Git, an issue, or chat.
+15. Open `https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/settings/hooks`, select **Add webhook**, and paste Greasy Fork's Payload URL and secret.
+16. Set Content type to `application/json`, choose **Let me select individual events**, enable only **Releases**, and leave the webhook active.
+17. After GitHub accepts the webhook, return only the public Greasy Fork script page URL to the maintainer; do not share the webhook secret.
+
+GitHub's `release: published` event tells Greasy Fork to retrieve the deployed Pages userscript. The webhook does not replay the already-published initial Release, so the first script version is uploaded manually; each later public update needs a new `package.json` version and a new `[build-publish]` Release.
 
 ## ✅ Verification and recovery
 
