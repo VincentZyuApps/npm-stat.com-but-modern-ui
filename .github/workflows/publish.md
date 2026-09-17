@@ -1,5 +1,7 @@
 # GitHub Actions Release, Gitee Mirror, GitHub Pages, and Greasy Fork
 
+> [简体中文](publish.zh-cn.md)
+
 `publish.yml` is the release workflow for npm-stat Modern UI. It deliberately runs only when a matching commit message is pushed or when it is started manually, so ordinary documentation and development pushes do not build or publish releases.
 
 ## Workflow modes
@@ -59,7 +61,7 @@ In **Settings -> Secrets and variables -> Actions**, create these repository sec
 
 Release modes validate both secrets before creating a GitHub Release. They also check the SSH key against the Gitee repository and confirm the token has push permission. A missing or invalid credential therefore fails safely before any public Release or Pages deployment is created.
 
-Generate an isolated key instead of sharing a personal daily-use key. This limits the key to this one Gitee mirror: rotating or revoking it later cannot affect daily-use SSH access or other projects. The public key is added to Gitee; only the private key is stored in the GitHub Actions secret.
+Generate an isolated key instead of sharing a personal daily-use key. It gives this automation an independent credential lifecycle, so it can be rotated or revoked without replacing the key used on your computers. Because this key is registered to a personal Gitee account, it inherits that account's repository access; it is not server-side restricted to this one mirror. For strict least privilege, use a dedicated Gitee automation account and grant it access only to this mirror repository. The public key is added to Gitee; only the private key is stored in the GitHub Actions secret.
 
 ```powershell
 New-Item -ItemType Directory -Force "E:\tmp\codex\npm-stat.com-but-modern-ui\release-key"
