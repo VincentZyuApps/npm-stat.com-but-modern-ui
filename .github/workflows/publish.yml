@@ -155,9 +155,11 @@ jobs:
             | jq -e '.permission.push == true' >/dev/null
 
   publish-release:
-    needs: [select-mode, build, validate-gitee-secrets, publish-pages]
+    needs: [select-mode, build, validate-gitee-secrets, publish-pages, publish-greasyfork-source]
     if: >-
       always() &&
+      needs.validate-gitee-secrets.result == 'success' &&
+      needs.publish-greasyfork-source.result == 'success' &&
       (needs.select-mode.outputs.mode == 'release' ||
       (needs.select-mode.outputs.mode == 'publish' && needs.publish-pages.result == 'success'))
     runs-on: ubuntu-latest
@@ -210,6 +212,67 @@ jobs:
           else
             gh release create "${RELEASE_TAG}" release/* --target "${GITHUB_SHA}" --title "${RELEASE_TAG}" --notes-file release-notes.md "${release_kind[@]}"
           fi
+
+  publish-greasyfork-source:
+    needs: [select-mode, build, validate-gitee-secrets]
+    if: needs.select-mode.outputs.mode == 'release' || needs.select-mode.outputs.mode == 'publish'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v5
+        with:
+          name: release-assets
+          path: release/
+      - name: Update the Greasy Fork source branch
+        uses: actions/github-script@v8
+        env:
+          SOURCE_BRANCH: greasyfork
+          SOURCE_FILE: npm-stat-modern-ui.user.js
+          RELEASE_TAG: ${{ needs.select-mode.outputs.tag }}
+        with:
+          script: |
+            const fs = require('node:fs');
+            const branch = process.env.SOURCE_BRANCH;
+            const path = process.env.SOURCE_FILE;
+            const content = fs.readFileSync(`release/${path}`).toString('base64');
+
+            try {
+              await github.rest.git.getRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `heads/${branch}`,
+              });
+            } catch (error) {
+              if (error.status !== 404) throw error;
+              await github.rest.git.createRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: `refs/heads/${branch}`,
+                sha: context.sha,
+              });
+            }
+
+            let existingSha;
+            try {
+              const { data } = await github.rest.repos.getContent({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                path,
+                ref: branch,
+              });
+              if (!Array.isArray(data)) existingSha = data.sha;
+            } catch (error) {
+              if (error.status !== 404) throw error;
+            }
+
+            await github.rest.repos.createOrUpdateFileContents({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              branch,
+              path,
+              content,
+              sha: existingSha,
+              message: `build: publish ${path} for ${process.env.RELEASE_TAG}`,
+            });
 
   sync-gitee-code:
     needs: [select-mode, validate-gitee-secrets]

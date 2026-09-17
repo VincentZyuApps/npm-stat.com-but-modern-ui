@@ -20,15 +20,15 @@ Use one of these exact phrases in a commit message:
 | `[build-release]` | Yes | Yes | Yes | No |
 | `[build-publish]` | Yes | Yes | Yes | Yes |
 
-The same modes are available from **Actions -> Build Release Publish -> Run workflow**. The optional `tag` defaults to `v` plus `package.json`'s version. Every published alpha, beta, rc, and stable version is marked as GitHub latest so the fixed Greasy Fork source URL always resolves.
+The same modes are available from **Actions -> Build Release Publish -> Run workflow**. The optional `tag` defaults to `v` plus `package.json`'s version. Every published alpha, beta, rc, and stable version is marked as GitHub latest so the stable Release download URL always resolves.
 
 Example release sequence:
 
 ```powershell
-npm version 0.2.0-rc.2+20260917 --no-git-tag-version
+npm version 0.2.0-rc.3+20260917 --no-git-tag-version
 npm run check
 git add -A
-git commit -m "[build-publish] release v0.2.0-rc.2+20260917"
+git commit -m "[build-publish] release v0.2.0-rc.3+20260917"
 git push origin main
 ```
 
@@ -131,32 +131,32 @@ License:  MIT
 
 ### 🔄 Configure automatic source synchronization
 
-11. Open the published script's **Admin** page and configure automatic source synchronization with this GitHub Release URL:
+11. Open the published script's **Admin** page and configure automatic source synchronization with this generated GitHub Raw URL:
 
 ```text
-https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases/latest/download/npm-stat-modern-ui.user.js
+https://raw.githubusercontent.com/VincentZyuApps/npm-stat.com-but-modern-ui/greasyfork/npm-stat-modern-ui.user.js
 ```
 
-12. Save the source setting. If the Admin page offers a manual synchronization action, run it and check that the displayed `@version` matches the Release asset.
+12. Save the source setting. The release workflow updates the generated `greasyfork` branch before publishing each Release; run manual synchronization once and check the displayed `@version`.
 
-### 📣 Configure the GitHub Release webhook
+### 📣 Configure the GitHub push webhook
 
 13. Open `https://greasyfork.org/zh-CN/users/webhook-info` while signed in and generate a webhook configuration.
 14. Keep the displayed Payload URL and secret private; copy them into GitHub's **Webhook Secret** field, never into an Actions Secret, Git, an issue, or chat.
 15. Open `https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/settings/hooks`, select **Add webhook**, and paste Greasy Fork's Payload URL and secret.
-16. Set Content type to `application/json`, choose **Let me select individual events**, enable only **Releases**, and leave the webhook active; regenerating this account-level secret requires updating every existing Greasy Fork GitHub webhook.
+16. Set Content type to `application/json`, choose **Let me select individual events**, enable only **Pushes**, and leave the webhook active; regenerating this account-level secret requires updating every existing Greasy Fork GitHub webhook.
 17. After GitHub accepts the webhook, return only the public Greasy Fork script page URL to the maintainer; do not share the webhook secret.
 
-GitHub's `release: published` event tells Greasy Fork to retrieve the uploaded Release userscript. The webhook does not replay the already-published initial Release, so the first script version is uploaded manually; each later public update needs a new `package.json` version and a new `[build-publish]` Release.
+The workflow first updates the generated `greasyfork` branch, and GitHub's matching `push` event tells Greasy Fork to fetch its Raw userscript. The first script version is uploaded manually; each later public update needs a new `package.json` version and a new `[build-publish]` Release.
 
 ## ✅ Verification and recovery
 
 After `[build-publish]`, verify the build, Release, Pages, Gitee and Greasy Fork in that order:
 
-1. The GitHub Actions jobs `build`, `publish-release`, `sync-gitee-code`, `sync-gitee-release`, and `publish-pages` have succeeded.
+1. The GitHub Actions jobs `build`, `publish-greasyfork-source`, `publish-release`, `sync-gitee-code`, `sync-gitee-release`, and `publish-pages` have succeeded.
 2. The GitHub Release contains all three assets and the checksums verify with `Get-FileHash`.
 3. The Pages URL downloads the new `.user.js`, including the expected `@version` header.
 4. Gitee has the matching commit/tag and all three Release assets.
-5. GitHub's Greasy Fork webhook delivery is `2xx`; Greasy Fork then displays the same version.
+5. GitHub's Greasy Fork `push` webhook delivery is `2xx`; Greasy Fork then displays the same version.
 
-For a Gitee failure, verify both secrets, the Gitee SSH public key, the account's write permission, and the configured Gitee owner/repository constants in `publish.yml`. For a Greasy Fork failure, first check that a new Release was created, the latest asset URL is public, the version changed, and the webhook secret matches both services.
+For a Gitee failure, verify both secrets, the Gitee SSH public key, the account's write permission, and the configured Gitee owner/repository constants in `publish.yml`. For a Greasy Fork failure, check the generated branch file, Raw source URL, changed version, `push` webhook event, and matching webhook secret.

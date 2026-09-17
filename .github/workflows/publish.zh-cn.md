@@ -20,15 +20,15 @@
 | `[build-release]` | 是 | 是 | 是 | 否 |
 | `[build-publish]` | 是 | 是 | 是 | 是 |
 
-也可以通过 **Actions -> Build Release Publish -> Run workflow** 手动选择同样的模式。可选的 `tag` 默认为 `v` 加上 `package.json` 中的版本号。所有已发布的 alpha、beta、rc 与正式版本都会标记为 GitHub latest，使固定的 Greasy Fork 源码 URL 始终可解析。
+也可以通过 **Actions -> Build Release Publish -> Run workflow** 手动选择同样的模式。可选的 `tag` 默认为 `v` 加上 `package.json` 中的版本号。所有已发布的 alpha、beta、rc 与正式版本都会标记为 GitHub latest，使稳定的 Release 下载 URL 始终可解析。
 
 发版示例：
 
 ```powershell
-npm version 0.2.0-rc.2+20260917 --no-git-tag-version
+npm version 0.2.0-rc.3+20260917 --no-git-tag-version
 npm run check
 git add -A
-git commit -m "[build-publish] release v0.2.0-rc.2+20260917"
+git commit -m "[build-publish] release v0.2.0-rc.3+20260917"
 git push origin main
 ```
 
@@ -131,32 +131,32 @@ License:  MIT
 
 ### 🔄 配置自动源码同步
 
-11. 打开已发布脚本的 **Admin** 页面，并将自动源码同步配置为此 GitHub Release URL：
+11. 打开已发布脚本的 **Admin** 页面，并将自动源码同步配置为此自动生成的 GitHub Raw URL：
 
 ```text
-https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/releases/latest/download/npm-stat-modern-ui.user.js
+https://raw.githubusercontent.com/VincentZyuApps/npm-stat.com-but-modern-ui/greasyfork/npm-stat-modern-ui.user.js
 ```
 
-12. 保存源码设置。若 Admin 页面提供手动同步操作，执行它并确认页面显示的 `@version` 与 Release 附件相同。
+12. 保存源码设置。发版工作流会在每次发布 Release 前更新这个生成的 `greasyfork` 分支；执行一次手动同步并确认显示的 `@version`。
 
-### 📣 配置 GitHub Release Webhook
+### 📣 配置 GitHub push Webhook
 
 13. 保持登录并打开 `https://greasyfork.org/zh-CN/users/webhook-info`，创建 webhook 配置。
 14. 将页面显示的 Payload URL 与 secret 保持私密，填入 GitHub 的 **Webhook Secret** 字段；不要放入 Actions Secret、Git、Issue 或聊天记录。
 15. 打开 `https://github.com/VincentZyuApps/npm-stat.com-but-modern-ui/settings/hooks`，选择 **Add webhook**，并填入 Greasy Fork 提供的 Payload URL 和 secret。
-16. Content type 选 `application/json`，选择 **Let me select individual events**，仅启用 **Releases**，并保持 webhook active；重置这个账号级 secret 后，须更新全部现有的 Greasy Fork GitHub webhook。
+16. Content type 选 `application/json`，选择 **Let me select individual events**，仅启用 **Pushes**，并保持 webhook active；重置这个账号级 secret 后，须更新全部现有的 Greasy Fork GitHub webhook。
 17. GitHub 接受 webhook 后，只将公开的 Greasy Fork 脚本页 URL 发给维护者；不要发送 webhook secret。
 
-GitHub 的 `release: published` 事件会通知 Greasy Fork 获取已上传的 Release 用户脚本。webhook 不会重放已经发布的首个 Release，因此初始脚本版本须手动上传；之后每次公开更新都须递增 `package.json` 版本，并创建新的 `[build-publish]` Release。
+工作流会先更新生成的 `greasyfork` 分支，GitHub 对应的 `push` 事件随即通知 Greasy Fork 拉取其 Raw 用户脚本。初始脚本版本须手动上传；之后每次公开更新都须递增 `package.json` 版本，并创建新的 `[build-publish]` Release。
 
 ## ✅ 验证与恢复
 
 执行 `[build-publish]` 后，按以下顺序验证构建、Release、Pages、Gitee 与 Greasy Fork：
 
-1. GitHub Actions 中的 `build`、`publish-release`、`sync-gitee-code`、`sync-gitee-release` 和 `publish-pages` 均成功。
+1. GitHub Actions 中的 `build`、`publish-greasyfork-source`、`publish-release`、`sync-gitee-code`、`sync-gitee-release` 和 `publish-pages` 均成功。
 2. GitHub Release 包含全部三个附件，并可用 `Get-FileHash` 验证校验和。
 3. Pages URL 可下载新 `.user.js`，且包含预期的 `@version` 头部。
 4. Gitee 具有相同的 commit/tag 与全部三个 Release 附件。
-5. GitHub 的 Greasy Fork webhook 投递为 `2xx`；随后 Greasy Fork 展示相同版本。
+5. GitHub 的 Greasy Fork `push` webhook 投递为 `2xx`；随后 Greasy Fork 展示相同版本。
 
-若 Gitee 失败，检查两个 Secret、Gitee SSH 公钥、账号写权限，以及 `publish.yml` 中配置的 Gitee owner/repository 常量。若 Greasy Fork 未更新，先检查是否创建了新 Release、latest 附件 URL 是否公开、版本是否递增，以及 webhook secret 是否在两侧一致。
+若 Gitee 失败，检查两个 Secret、Gitee SSH 公钥、账号写权限，以及 `publish.yml` 中配置的 Gitee owner/repository 常量。若 Greasy Fork 未更新，检查生成分支文件、Raw 源码 URL、版本是否递增、`push` webhook 事件与两侧一致的 webhook secret。
