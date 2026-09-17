@@ -137,7 +137,7 @@ License:  MIT
 https://raw.githubusercontent.com/VincentZyuApps/npm-stat.com-but-modern-ui/greasyfork/npm-stat-modern-ui.user.js
 ```
 
-12. Save the source setting. The release workflow updates the generated `greasyfork` branch before publishing each Release; run manual synchronization once and check the displayed `@version`.
+12. Save the source setting. The release workflow updates the generated single-file `greasyfork` branch before each Release; run manual synchronization once and check `@version`.
 
 ### 📣 Configure the GitHub push webhook
 
